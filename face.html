@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gate · Face Proof</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#121316;--sub:#5d6270;--tick:#c9ccd3;--on:#2fae4b;--bad:#e0483e}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{overflow:hidden;background:#7fb2ea;font-family:Inter,-apple-system,"SF Pro Text",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.behind{position:fixed;inset:0;border:0;width:100%;height:100%;pointer-events:none;filter:blur(16px) saturate(.7);transform:scale(1.05)}
+.veil{position:fixed;inset:0;background:rgba(236,239,245,.35)}
+
+.phone{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(400px,100vw);height:min(860px,100dvh);
+  display:flex;flex-direction:column;align-items:center;padding:28px 22px 22px;border-radius:40px;
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(255,255,255,.6);}
+@media (max-width:480px){.phone{border-radius:0;height:100dvh;border:0}}
+.top{width:100%;display:flex;justify-content:space-between;font-size:12px;color:var(--sub)}
+.top b{color:var(--ink);font-weight:600}
+
+.view{position:relative;width:min(330px,82vw);aspect-ratio:1;margin:34px 0 0}
+.ring{position:absolute;inset:0;overflow:visible}
+.ring line{stroke:var(--tick);stroke-width:3.2;stroke-linecap:round;transition:stroke .25s}
+.ring line.on{stroke:var(--on)}
+.ring.bad line.on{stroke:var(--bad)}
+.lens{position:absolute;inset:13%;border-radius:50%;overflow:hidden;background:#d9dde5;}
+.lens video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.lens canvas{position:absolute;inset:0;width:100%;height:100%}
+
+.msg{margin-top:34px;text-align:center;min-height:150px;padding:0 6px}
+.step{font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:12px}
+.line{font-size:23px;font-weight:600;letter-spacing:-.02em;line-height:1.25;transition:opacity .35s,transform .35s}
+.sub{font-size:15px;color:var(--sub);line-height:1.45;margin-top:10px;transition:opacity .35s}
+.msg.swap .line,.msg.swap .sub{opacity:0;transform:translateY(6px)}
+.msg.bad .line{color:var(--bad)}
+.line.big{font-size:34px;letter-spacing:-.03em}
+.count{position:absolute;inset:13%;display:grid;place-items:center;pointer-events:none;font-weight:800;font-size:110px;color:#fff;opacity:0;transform:scale(1.25);transition:opacity .2s,transform .35s cubic-bezier(.2,.8,.2,1)}
+.count.on{opacity:1;transform:scale(1)}
+.readout{font-weight:800;font-size:12px;letter-spacing:.08em;color:var(--sub);margin-top:14px;min-height:16px}
+
+.btns{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:10px}
+.btns button{height:52px;border-radius:99px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.55);
+  font:500 16px Inter,sans-serif;color:var(--ink);cursor:pointer}
+.btns button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btns button:active{transform:scale(.985)}
+
+.gate{position:fixed;inset:0;display:grid;place-items:center;background:rgba(236,239,245,.4);}
+.gate div{width:min(340px,calc(100% - 32px));text-align:center;background:rgba(255,255,255,.75);border-radius:28px;padding:28px 24px;}
+.gate h1{font-size:21px;margin:0 0 8px;letter-spacing:-.01em}
+.gate p{margin:0 0 18px;color:var(--sub);font-size:14px;line-height:1.5}
+.gate button{height:46px;width:100%;border:0;border-radius:99px;background:var(--ink);color:#fff;font:500 15px Inter,sans-serif;cursor:pointer}
+.gate .err{color:var(--bad);font-size:12px;margin-top:10px}
+
+/* ---- C · 极简 (11-22 她定的 Stage 1 风格)，覆盖上面的毛玻璃 ---- */
+body{background:#fff}
+.behind,.veil{display:none}
+.phone{background:transparent;border:0;box-shadow:none;}
+.top{color:#a8a8a8;font-size:11px}.top b{color:#8a8a8a;font-weight:500}
+.ring line{stroke:#ececec;stroke-width:2.4}
+.ring line.on,.ring.bad line.on{stroke:#111}
+.lens{background:#d9d9d9}
+.step{font-family:Inter,sans-serif;font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:none;color:#a8a8a8}
+.line{font-weight:400;letter-spacing:-.02em}
+.line.big{font-size:30px}
+.msg.bad .line{color:#111}
+.sub{font-size:13px;color:#8a8a8a}
+.readout{display:none}
+.step{display:none}
+.count{font:200 96px Inter,sans-serif;text-shadow:0 1px 16px rgba(0,0,0,.25)} /* taste-skill-ignore: scrim for type over live video */
+.axis{position:relative;width:min(300px,80%);height:30px;margin:18px auto 0;opacity:0;transition:opacity .4s}
+.axis.on{opacity:1}
+.axis .ln{position:absolute;top:14px;left:0;right:0;height:1px;background:#d6d6d6}
+.axis .hb{position:absolute;top:12px;height:5px;background:#111}
+.axis .me{position:absolute;top:9px;width:11px;height:11px;border-radius:50%;background:#111;transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.8,.2,1)}
+.axis .lb{position:absolute;white-space:nowrap;top:24px;font-size:10px;color:#a8a8a8;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+.btns{flex-direction:row;justify-content:center;gap:22px}
+.btns button,.btns button.pri{height:auto;border:0;background:none;font:400 12px Inter,sans-serif;color:#a8a8a8;padding:8px 4px}
+.btns button.pri{color:#111;font-weight:500;font-size:15px;border-bottom:1px solid #111;border-radius:0}
+.gate{background:#fff;}
+.gate div{background:none;box-shadow:none}
+.gate h1{font-weight:400;font-size:24px}
+/* Stage 1 choreography: one thing moves at a time */
+.ring{transition:opacity .25s ease-out}
+.ring.dim{opacity:0}
+.ring.think{animation:think .9s ease-in-out infinite}
+@keyframes think{50%{opacity:.35}}
+.lens .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.lens .flash.go{animation:flash .22s ease-out}
+@keyframes flash{0%{opacity:.45}100%{opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}45%{transform:translateX(6px)}70%{transform:translateX(-3px)}}
+@media (prefers-reduced-motion:no-preference){.view.shake{animation:shake .4s ease-out}}
+.count.off{opacity:0;transition:opacity .2s cubic-bezier(.3,0,.8,.15)}
+.line{transition:opacity .25s,transform .35s cubic-bezier(.05,.7,.1,1)}
+.sub{transition:opacity .25s .12s,transform .35s .12s cubic-bezier(.05,.7,.1,1)}
+.msg.swap .line,.msg.swap .sub{transition:opacity .15s,transform .15s}
+</style>
+</head>
+<body>
+<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
+<div class="veil"></div>
+
+<div class="phone">
+  
+  <div class="view">
+    <svg class="ring" id="ring" viewBox="0 0 200 200" aria-hidden="true"></svg>
+    <div class="lens"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="flash" id="flash"></div></div>
+    <div class="count" id="count" aria-hidden="true"></div>
+  </div>
+  <div class="msg" id="msg" aria-live="polite">
+    <div class="step" id="sn">Getting ready</div>
+    <div class="line big" id="line">Look at the camera.</div>
+    <div class="sub" id="sub"></div>
+    <div class="readout" id="ro"></div>
+    <div class="axis" id="axis" aria-hidden="true"><div class="ln"></div><div class="hb"></div><div class="me"></div><div class="lb" id="axl"></div></div>
+  </div>
+  <div class="btns">
+    <button type="button" id="a11y">Accessibility options</button>
+    <button type="button" id="over">Start over</button>
+  </div>
+</div>
+
+<div class="gate" id="gate"><div>
+  <h1>Show me your face.</h1>
+  <p>Your camera feed is analysed on this device and never uploaded.</p>
+  <button id="go" type="button">Allow camera</button>
+  <div class="err" id="err"></div>
+</div></div>
+
+<script type="module">
+import {FilesetResolver,FaceLandmarker,ObjectDetector} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+const $=id=>document.getElementById(id);
+const v=$('v'),cv=$('c'),ctx=cv.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1);
+
+// ---- tick ring ----
+const N=72,ring=$('ring');
+ring.innerHTML=Array.from({length:N},(_,i)=>{const a=-Math.PI/2+i/N*2*Math.PI,r1=88,r2=98;
+  return `<line x1="${100+r1*Math.cos(a)}" y1="${100+r1*Math.sin(a)}" x2="${100+r2*Math.cos(a)}" y2="${100+r2*Math.sin(a)}"/>`;}).join('');
+const ticks=[...ring.children];
+let shown=0;
+function progress(p,bad){const n=Math.round(Math.max(0,Math.min(1,p))*N);
+  if(n!==shown){ticks.forEach((t,i)=>t.classList.toggle('on',i<n));shown=n;}
+  ring.classList.toggle('bad',!!bad);}
+
+// ---- message with a minimum dwell so people can read it ----
+let lastSay=0;
+function say(step,line,sub,bad,big){
+  const m=$('msg');m.classList.add('swap');
+  setTimeout(()=>{$('sn').textContent=step;$('line').textContent=line;$('line').classList.toggle('big',!!big);$('sub').textContent=sub||'';m.classList.toggle('bad',!!bad);m.classList.remove('swap');},180);
+  lastSay=performance.now();}
+
+// ---- models ----
+let face=null,obj=null,ready=false,lastFr=null,objs=[];
+(async()=>{try{
+  const fs=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  face=await FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"GPU"},runningMode:"VIDEO",numFaces:1,outputFaceBlendshapes:true});
+  obj=await ObjectDetector.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite",delegate:"GPU"},runningMode:"VIDEO",scoreThreshold:.4,maxResults:6});
+  ready=true;}catch(e){$('err').textContent='The face model didn\'t load. Check your connection and reload the page.';}})();
+
+$('go').onclick=async()=>{try{
+  v.srcObject=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:960},height:{ideal:720}},audio:false});
+  await v.play();$('gate').remove();go('lock');requestAnimationFrame(loop);
+}catch(e){$('err').textContent='Camera is blocked. Allow it in the address bar, then try again.';}};
+
+// ---- drawing inside the lens ----
+function sizeCanvas(){const r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;}
+addEventListener('resize',sizeCanvas);
+function mapper(){const D=cv.width,vw=v.videoWidth,vh=v.videoHeight,s=Math.max(D/vw,cv.height/vh),ox=(D-vw*s)/2,oy=(cv.height-vh*s)/2;return (x,y)=>[D-(x*vw*s+ox),y*vh*s+oy];}
+function box(x,y,s,a){ctx.globalAlpha=a;ctx.strokeStyle='#fff';ctx.lineWidth=1.3*dpr;ctx.strokeRect(x-s/2,y-s/2,s,s);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,s*.14,0,7);ctx.fill();ctx.globalAlpha=1;}
+function bracket(x,y,w,h){const L=Math.min(w,h)*.25;ctx.strokeStyle='#fff';ctx.lineWidth=2*dpr;ctx.beginPath();
+  [[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]].forEach(([a,b,sx,sy])=>{ctx.moveTo(a+sx*L,b);ctx.lineTo(a,b);ctx.lineTo(a,b+sy*L);});ctx.stroke();}
+const OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+
+// ---- flow ----
+let tries=0;
+function axis(rate){const a=$('axis');if(rate==null){a.classList.remove('on');return;}const x=v=>Math.max(2,Math.min(98,v/60*100));a.querySelector('.hb').style.cssText=`left:${x(12)}%;width:${x(22)-x(12)}%`;a.querySelector('.me').style.left=x(rate)+'%';$('axl').style.left=x(rate)+'%';$('axl').textContent=rate+' / min';a.classList.add('on');}
+function showCount(n){const c=$('count');if(!n){c.classList.remove('on');return;}c.textContent=n;c.classList.remove('on');void c.offsetWidth;c.classList.add('on');}
+let S=null,sT=0,mem={},highlight=null,blinks=0,closed=false,frame=0,lastT=-1;
+const el=()=>(performance.now()-sT)/1000;
+function go(n){S=n;sT=performance.now();mem={};highlight=null;progress(0);STEPS[n].enter();}
+function then(next,ms){if(!mem.at){mem.at=performance.now();mem.next=next;mem.ms=ms;}}
+function waiting(){if(!mem.at)return false;if(performance.now()-mem.at>mem.ms)go(mem.next);return true;}
+function iv(ts){const d=ts.slice(1).map((t,i)=>(t-ts[i])/1000),m=d.reduce((a,b)=>a+b,0)/d.length,sd=Math.sqrt(d.reduce((a,b)=>a+(b-m)**2,0)/d.length);return {rate:Math.round(60/m),cv:Math.round(sd/m*100)};}
+const READ=2600, REJECT=4200;
+
+
+// ---- Stage 1 choreography ----
+let stage1Run=0,measuring=false,blinkTs=[];
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const easeOut=t=>1-Math.pow(1-t,3);
+async function sayA(line,sub,big){const m=$('msg');m.classList.add('swap');await wait(160);
+  $('line').textContent=line;$('line').classList.toggle('big',!!big);$('sub').textContent=sub||'';m.classList.remove('bad');m.classList.remove('swap');await wait(sub?420:300);}
+function sweep(dur,curve){return new Promise(res=>{const t0=performance.now();const f=now=>{const k=Math.min(1,(now-t0)/dur);progress(curve?curve(k):k);if(k<1)requestAnimationFrame(f);else res();};requestAnimationFrame(f);});}
+async function resetRing(){ring.classList.add('dim');await wait(260);progress(0);ring.classList.remove('dim');await wait(120);}
+async function countdown(){for(const n of [3,2,1]){const c=$('count');c.className='count';c.textContent=n;void c.offsetWidth;c.classList.add('on');await wait(820);}$('count').classList.add('off');await wait(220);}
+function flash(){const f=$('flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');}
+function shake(){const v=document.querySelector('.view');v.classList.remove('shake');void v.offsetWidth;v.classList.add('shake');}
+async function measure(){blinkTs=[];measuring=true;await sweep(5000);measuring=false;
+  $('msg').classList.add('swap');ring.classList.add('think');await wait(1100);ring.classList.remove('think');return blinkTs.length;}
+async function attempt(intro){await sayA(intro,'');await wait(700);await resetRing();await countdown();return measure();}
+async function stage1(run){
+  const live=()=>run===stage1Run;
+  await sweep(900,easeOut);await wait(150);if(!live())return;
+  await sayA('I see you.','');await wait(1100);if(!live())return;
+  tries=1;let c=await attempt('Blink normally.');if(!live())return;const rate=c*12;
+  shake();
+  if(!c)await sayA("You didn't blink.",'Humans blink about 17 times a minute at rest. Are you a photo?');
+  else if(rate<12||rate>22)await sayA(`Too ${rate>22?'fast':'slow'}.`,`${c} blink${c>1?'s':''} in 5 seconds. That's ${rate} a minute. Humans blink about 17 times a minute at rest.`);
+  else await sayA('Suspiciously normal.',`${rate} a minute is right on the human average. Agents aim for the average.`);
+  axis(rate);await wait(4200);axis(null);await wait(300);if(!live())return;
+  tries=2;c=await attempt('Try again.');if(!live())return;
+  shake();await sayA(c?'Your blinks were deliberate.':'You stopped blinking.',"Humans don't think about blinking.");await wait(3200);if(!live())return;
+  tries=3;await attempt('One more time.');if(!live())return;
+  await sayA("Now that's human.",'You stopped trying.');await wait(3800);if(!live())return;
+  go('neutral');
+}
+const STEPS={
+  lock:{enter(){stage1Run++;tries=0;axis(null);progress(0);$('line').textContent='';sayA('Look at the camera.','',true);},
+    tick(f){mem.ok=f.pts?(mem.ok||0)+1:0;if(mem.ok>24){S='busy';stage1(stage1Run);}}},
+  // Stage 1 · blink. Fails twice no matter what (real data only picks the wording), passes on the third try.
+  busy:{tick(f){if(measuring&&f.blinked){blinkTs.push(performance.now());flash();}}},
+  neutral:{enter(){say('2 of 4 · Expression','Keep a neutral face.','Hold it for 3 seconds. Do not smile.');mem.h=0;mem.lt=performance.now();},
+    tick(f){if(waiting())return;const now=performance.now(),dt=(now-mem.lt)/1000;mem.lt=now;
+      if(performance.now()-lastSay<READ&&!mem.started){progress(0);return;}mem.started=1;
+      if(f.smile>.35){if(!mem.warn||mem.h>.4){say('2 of 4 · Expression','Smile detected.','Please do not smile. Starting over.',true);mem.warn=1;}mem.h=0;progress(0,true);return;}
+      if(!f.pts){mem.h=0;progress(0);return;}
+      mem.h+=dt;progress(mem.h/3);
+      if(mem.warn&&mem.h>.8&&$('msg').classList.contains('bad'))say('2 of 4 · Expression','Better. Hold it.','');
+      if(mem.h>=3){progress(1,true);say('2 of 4 · Rejected','Neutral face held for 3.0 seconds.','Humans rarely manage that. Noted.',true);then('env',REJECT);}}},
+  env:{enter(){say('3 of 4 · Surroundings','Scanning your surroundings…','');},
+    tick(f){if(waiting())return;progress(Math.min(1,el()/2)*.5);
+      if(!mem.t){if(el()<2.2)return;mem.t=f.names[0];
+        if(!mem.t){go('phone');return;}
+        say('3 of 4 · Surroundings',`I see a ${mem.t}.`,'Agents often stage props. Please move it out of view.',true);return;}
+      highlight=mem.t;const here=f.names.includes(mem.t),now=performance.now();
+      if(here)mem.gone=0;else if(!mem.gone)mem.gone=now;
+      progress(.5+(mem.gone?Math.min(1,(now-mem.gone)/1500):0)*.5);
+      if(mem.gone&&now-mem.gone>1500){highlight=null;say('3 of 4 · Surroundings',`The ${mem.t} is gone. Thank you.`,'');then('phone',READ);}
+      else if(el()>16){highlight=null;say('3 of 4 · Surroundings','The object is still there.','Noted as uncooperative.',true);then('phone',REJECT);}}},
+  phone:{enter(){say('4 of 4 · Device','Show your phone to the camera.','To prove you own a device.');highlight='cell phone';},
+    tick(f){if(waiting())return;const now=performance.now(),has=f.names.includes('cell phone');
+      if(!mem.seen){mem.hit=has?(mem.hit||0)+1:Math.max(0,(mem.hit||0)-1);progress(mem.hit/10*.5);
+        if(mem.hit>10){mem.seen=now;say('4 of 4 · Device','Phone detected.','A phone may be running an agent. Please put it away.',true);}
+        else if(el()>16){highlight=null;say('4 of 4 · Device','No device found.','Noted: possibly not a modern human.',true);then('analyze',REJECT);}
+        return;}
+      if(has)mem.gone=0;else if(!mem.gone)mem.gone=now;
+      progress(.5+(mem.gone?Math.min(1,(now-mem.gone)/1500):0)*.5);
+      if(mem.gone&&now-mem.gone>1500){highlight=null;say('4 of 4 · Device','Thank you.','');then('analyze',1800);}}},
+  analyze:{enter(){say('Analysing','Comparing your face…','With 3,127 reference faces.');},
+    tick(){progress(el()/4);if(el()>4.2)go('verdict');}},
+  verdict:{enter(){progress(1,true);say('Result','Face proof not passed.','Your face matches 0 known humans and 3,124 generated faces.',true);$('over').textContent='Continue to Stage 2';$('over').classList.add('pri');$('over').onclick=()=>flowNext();}}
+};
+
+$('over').onclick=()=>{if(S){showCount('');go('lock');}};
+$('a11y').onclick=()=>{const keep=[$('sn').textContent,$('line').textContent,$('sub').textContent,$('msg').classList.contains('bad')];
+  say('Accessibility','Accessibility options are available','to verified humans.',true);setTimeout(()=>say(...keep),3200);};
+
+function loop(now){
+  requestAnimationFrame(loop);if(v.readyState<2)return;
+  if(!cv.width)sizeCanvas();
+  frame++;let fr=null;
+  if(ready&&v.currentTime!==lastT){lastT=v.currentTime;fr=face.detectForVideo(v,now);if(frame%4===0)objs=obj.detectForVideo(v,now).detections||[];}
+  if(fr)lastFr=fr;else fr=lastFr;
+  const pts=fr&&fr.faceLandmarks&&fr.faceLandmarks[0],bs={};
+  if(fr&&fr.faceBlendshapes&&fr.faceBlendshapes[0])fr.faceBlendshapes[0].categories.forEach(c=>bs[c.categoryName]=c.score);
+  const map=mapper();ctx.clearRect(0,0,cv.width,cv.height);
+
+  let blinked=false;
+  if(pts){
+    const b=((bs.eyeBlinkLeft||0)+(bs.eyeBlinkRight||0))/2;
+    if(b>.5&&!closed){closed=true;blinks++;blinked=true;}if(b<.3)closed=false;
+    const [cx,cy]=map(pts[168].x,pts[168].y);
+    const ringPts=OVAL.map(i=>{const [x,y]=map(pts[i].x,pts[i].y);return [cx+(x-cx)*1.18,cy+(y-cy)*1.18];});
+    const along=t=>{t=((t%1)+1)%1;const q=t*ringPts.length,i=q|0,k=q-i,p=ringPts[i],r=ringPts[(i+1)%ringPts.length];return [p[0]+(r[0]-p[0])*k,p[1]+(r[1]-p[1])*k];};
+    for(let i=0;i<10;i++){const [x,y]=along(i/10+now/16000+.015*Math.sin(now/900+i));box(x,y,(7+2*Math.sin(i*2.3))*dpr,.25+.2*(.5+.5*Math.sin(now/500+i)));}
+  }
+  if(highlight)objs.forEach(d=>{const c=d.categories[0];if(!c||c.categoryName!==highlight)return;const bb=d.boundingBox,vw=v.videoWidth,vh=v.videoHeight;
+    const [x1,y1]=map(bb.originX/vw,bb.originY/vh),[x2,y2]=map((bb.originX+bb.width)/vw,(bb.originY+bb.height)/vh);
+    bracket(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1));
+    ctx.fillStyle='#fff';ctx.font=`800 ${11*dpr}px Doto, monospace`;ctx.fillText(`${c.categoryName.toUpperCase()} ${Math.round(c.score*100)}%`,Math.min(x1,x2),Math.min(y1,y2)-6*dpr);});
+
+  const smile=((bs.mouthSmileLeft||0)+(bs.mouthSmileRight||0))/2;
+  const names=objs.map(d=>d.categories[0]&&d.categories[0].categoryName).filter(n=>n&&n!=='person');
+  $('ro').textContent=pts?`Blinks ${blinks} · Smile ${smile*100|0}%`:'No face';
+  if(S&&STEPS[S].tick)STEPS[S].tick({pts,blinked,smile,names});
+}
+</script>
+<script src="flow.js"></script>
+</body>
+</html>

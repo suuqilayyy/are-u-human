@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gate · Stage</title>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="gate.css">
+<style>
+.ph{margin-top:60px;text-align:center}
+.box{margin:36px auto 0;width:min(300px,78vw);aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;
+  font-family:Doto,monospace;font-weight:800;font-size:13px;letter-spacing:.12em;color:var(--sub)}
+.note{margin-top:28px;font-size:13px;color:var(--sub);line-height:1.5;text-align:center}
+</style>
+</head>
+<body>
+<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
+<div class="veil"></div>
+<div class="phone">
+  <div class="top"><span><b>Gate</b> · <span id="name"></span></span><span id="n"></span></div>
+  <div class="box" id="box">TO BE DESIGNED</div>
+  <div class="ph">
+    <div class="step" id="feel"></div>
+    <div class="line" id="title"></div>
+    <div class="note" id="note"></div>
+  </div>
+  <div class="btns"><button class="pri" type="button" id="next"></button></div>
+</div>
+<script src="flow.js"></script>
+<script>
+const s=new URLSearchParams(location.search).get('s')||'2';
+const D={
+  '2':{name:'Stage 2',feel:'Feeling · 较劲',title:'Stage 2 · placeholder',note:'评委看懂规则，开始想赢、故意表演"像人"；越努力越被判 Agent。',next:'Continue to Stage 3'},
+  '3':{name:'Stage 3',feel:'Feeling · 安静',title:'Stage 3 · placeholder',note:'节奏变慢，只做一个动作；Gate 要一样更私人的东西，评委不再笑。',next:'Continue'}
+}[s];
+const $=id=>document.getElementById(id);
+document.title='Gate · '+D.name;
+$('name').textContent=D.name;$('n').textContent=D.name+' of 3';
+$('feel').textContent=D.feel;$('title').textContent=D.title;$('note').textContent=D.note;
+$('next').textContent=D.next;$('next').onclick=()=>flowNext();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-21T11:29:04.263Z",
+        "reason": "Claude: Win95 window chrome (disabled grey toolbar labels, navy-to-blue title gradient) is period-accurate retro replication the user asked for from a reference screenshot"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-21T11:29:28.102Z",
+        "reason": "Claude: tight Win95 chrome and 88x31 badges replicate the 1990s reference screenshot the user asked for"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-21T11:29:28.118Z",
+        "reason": "Claude: scrolling marquee is a deliberate period element of the GeoCities-style page the user asked to replicate"
+      }
+    ]
+  }
+}

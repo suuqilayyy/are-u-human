@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gate · Scan Compare</title>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#8e9399;font-family:Inter,sans-serif;color:#111}
+.wrap{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;padding:32px 16px}
+.col{display:flex;flex-direction:column;gap:10px;align-items:center}
+.cap{color:#fff;font:500 13px Inter,sans-serif}
+.cap b{font-weight:600}
+.ph{width:360px;height:720px;position:relative;overflow:hidden;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.face{overflow:hidden;position:relative;background:radial-gradient(ellipse 42% 46% at 50% 44%,#d8c6b6 0,#b39d8b 45%,#7d6e63 75%,#4a423d 100%)}
+
+/* C · system layer */
+.C{background:#fbfbfb;display:flex;flex-direction:column;align-items:center;padding:0 28px}
+.C .cam{margin-top:150px;width:96px;height:96px;border-radius:50%}
+.C .ask{margin-top:40px;font-size:26px;font-weight:300;letter-spacing:-.02em}
+.C .axis{margin-top:70px;width:100%;position:relative;height:30px}
+.C .ln{position:absolute;left:0;right:0;top:14px;height:1px;background:#d6d6d6}
+.C .hb{position:absolute;top:13px;height:3px;background:#111}
+.C .me{position:absolute;top:10px;width:9px;height:9px;border-radius:50%;background:#111;transform:translateX(-4px)}
+.C .gap{position:absolute;top:14px;border-top:1px dashed #111}
+.C .num{margin-top:6px;font-size:12px;color:#8a8a8a}
+.C .foot{margin-top:auto;margin-bottom:34px;font-size:11px;color:#a8a8a8}
+
+/* Apple · Face ID scan (current face.html) */
+.P{background:#7fb2ea}
+.P .bg{position:absolute;inset:0;background:url(assets/bg/retro-archive-cloudyday.jpg) center/cover;filter:blur(14px) saturate(.7);transform:scale(1.1)}
+.P .glass{position:absolute;inset:0;background:rgba(255,255,255,.58);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);display:flex;flex-direction:column;align-items:center;padding:24px 20px 20px}
+.P .top{width:100%;display:flex;justify-content:space-between;font-size:11px;color:#5d6270}
+.P .top b{color:#121316;font-weight:600}
+.P .view{position:relative;width:270px;height:270px;margin-top:30px}
+.P .view svg{position:absolute;inset:0}
+.P .lens{position:absolute;inset:13%;border-radius:50%}
+.P .step{margin-top:28px;font:800 11px Doto,monospace;letter-spacing:.12em;color:#5d6270}
+.P .line{margin-top:10px;font-size:21px;font-weight:600;color:#e0483e;text-align:center;letter-spacing:-.02em}
+.P .sub{margin-top:8px;font-size:14px;color:#5d6270;text-align:center;line-height:1.45}
+.P .btns{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:9px}
+.P .btns div{height:48px;border-radius:99px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.55);display:grid;place-items:center;font-size:14px;font-weight:500}
+
+/* Green OS · Gate dashboard language */
+.G{background:#e8e8e6;padding:18px;font-size:12px}
+.G .shell{position:absolute;inset:14px;background:#efefed;border-radius:26px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 0 #fff inset}
+.G .brand{display:flex;justify-content:space-between;font-weight:600}
+.G .brand span{color:#8a8a86;font-weight:400}
+.G .pill{font-size:10px;padding:2px 8px;border-radius:99px;background:#d8f34a;color:#151515;font-weight:500}
+.G h1{margin:4px 0 0;font-size:30px;font-weight:300;letter-spacing:-.03em}
+.G .camc{border-radius:22px;height:250px;position:relative;overflow:hidden}
+.G .camc .tag{position:absolute;left:12px;top:12px;background:#fff;border-radius:99px;padding:4px 10px;font-size:10px;display:flex;gap:6px;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.G .camc .tag i{width:6px;height:6px;border-radius:50%;background:#2fae4b}
+.G .camc .eye{position:absolute;width:30px;height:12px;border:1.5px solid #fff;border-radius:99px}
+.G .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.G .glow{border-radius:20px;height:150px;color:#fff;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.G .glow .t{position:absolute;top:12px;left:0;right:0;font-size:10px;opacity:.9}
+.G .glow .big{font:800 46px Doto,monospace;line-height:1}
+.G .glow .s{font-size:10px;margin-top:4px;opacity:.95}
+.G .g2{background:radial-gradient(120% 90% at 50% 100%,#ee6a1f 0%,#f7a83b 40%,#f7cf9a 70%,#c9d6e6 100%)}
+.G .mk{background:#fff;border-radius:20px;padding:12px;display:flex;flex-direction:column}
+.G .mk .h{color:#8a8a86;font-size:10px}
+.G .mk .v{margin-top:auto;font:800 30px Doto,monospace;line-height:1}
+.G .mk .v span{font:400 10px Inter;color:#8a8a86;margin-left:4px}
+.G .rl{position:relative;height:16px;margin-top:8px;background:repeating-linear-gradient(90deg,#d6d6d1 0 1px,transparent 1px 5px)}
+.G .rl b{position:absolute;top:0;bottom:0;background:#2fae4b;opacity:.35}
+.G .rl i{position:absolute;top:-2px;width:3px;height:20px;background:#ee6a1f;border-radius:2px}
+.G .ask{background:#fff;border-radius:20px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.G .ask b{font-size:17px;font-weight:400}
+.G .ask span{font-size:10px;color:#8a8a86}
+.face .live{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.G .camc .tag,.G .camc .eye{z-index:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="col">
+    <div class="ph C">
+      <div class="cam face"><video class="live" autoplay muted playsinline></video></div>
+      <div class="ask">Please blink.</div>
+      <div class="axis"><div class="ln"></div><div class="hb" style="left:37.5%;width:12.5%"></div><div class="gap" style="left:50%;width:27.5%"></div><div class="me" style="left:77.5%"></div></div>
+      <div class="num">31</div>
+      <div class="foot">Gate</div>
+    </div>
+    <div class="cap"><b>C · 系统层</b> — 只有一句话和一条线</div>
+  </div>
+
+  <div class="col">
+    <div class="ph P">
+      <div class="bg"></div>
+      <div class="glass">
+        <div class="top"><span><b>Gate</b> · Face proof</span><span>Stage 1 of 3</span></div>
+        <div class="view">
+          <svg viewBox="0 0 200 200" id="ring"></svg>
+          <div class="lens face"><video class="live" autoplay muted playsinline></video></div>
+        </div>
+        <div class="step">1 OF 4 · REJECTED</div>
+        <div class="line">You blinked 31 times a minute.</div>
+        <div class="sub">Humans blink 15 to 20 times a minute.</div>
+        <div class="btns"><div>Accessibility Options</div><div>Start Over</div></div>
+      </div>
+    </div>
+    <div class="cap"><b>Apple · Face ID 扫描</b> — 现在的 face.html</div>
+  </div>
+
+  <div class="col">
+    <div class="ph G">
+      <div class="shell">
+        <div class="brand"><div>gate <span>· Stage 1 · Face</span></div><span class="pill">Live</span></div>
+        <h1>Please blink.</h1>
+        <div class="camc face"><video class="live" autoplay muted playsinline></video>
+          <div class="tag"><i></i>Face locked</div>
+          
+        </div>
+        <div class="row">
+          <div class="glow g2"><div class="t">Agent Likelihood</div><div class="big">68</div><div class="s">↑ 18 after blinking</div></div>
+          <div class="mk"><div class="h">◎ Blink rate</div><div class="v">31<span>/ min</span></div><div class="rl"><b style="left:37.5%;width:12.5%"></b><i style="left:77.5%"></i></div><div class="h" style="margin-top:6px">Human 15–20</div></div>
+        </div>
+        <div class="ask"><b>Too fast for a human.</b><span>Retry 1 of 4</span></div>
+      </div>
+    </div>
+    <div class="cap"><b>绿色 OS · 仪表盘</b> — 你的身体变成一组健康数据</div>
+  </div>
+
+</div>
+<script>
+// Face ID style tick ring: the filled arc has turned red after a rejection.
+(function(){
+  var s=document.getElementById('ring'),n=72,h='';
+  for(var i=0;i<n;i++){
+    var a=i/n*Math.PI*2-Math.PI/2,r1=92,r2=99,x1=100+r1*Math.cos(a),y1=100+r1*Math.sin(a),x2=100+r2*Math.cos(a),y2=100+r2*Math.sin(a);
+    var c=i<n*.34?'#e0483e':'#c9ccd3';
+    h+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="3.2" stroke-linecap="round"/>';
+  }
+  s.innerHTML=h;
+})();
+</script>
+<script>
+navigator.mediaDevices&&navigator.mediaDevices.getUserMedia({video:{width:1280,height:720}}).then(function(st){
+  document.querySelectorAll('video.live').forEach(function(v){v.srcObject=st;});
+}).catch(function(){});
+</script>
+</body>
+</html>

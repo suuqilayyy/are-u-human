@@ -1,0 +1,4 @@
+interface:
+  display_name: "野心原则"
+  short_description: "从目标、专业方法和跨领域借鉴出发，把任务做得更有价值并检验结果"
+  default_prompt: "用 $ambition-principles 看看这件事还能怎样想得更好、做得更深，并按当前授权推进。"

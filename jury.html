@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gate · Final question</title>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="gate.css">
+<style>
+.head{margin-top:26px}
+.cards{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.card{border-radius:20px;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.75);padding:14px 16px}
+.card .src{font-family:Doto,monospace;font-weight:800;font-size:11px;letter-spacing:.1em;color:var(--sub)}
+.card p{margin:6px 0 12px;font-size:15px;line-height:1.4}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;height:34px;border-radius:99px;border:1px solid var(--line);background:transparent;font:500 13px Inter,sans-serif;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card.reveal .src{color:var(--ink)}
+.card.reveal.ag{box-shadow:inset 0 0 0 2px var(--bad)}
+.card.reveal.hu{box-shadow:inset 0 0 0 2px var(--on)}
+.wait{display:none;margin-top:40px;text-align:center}
+.dots{display:flex;justify-content:center;gap:14px;margin:30px 0 10px}
+.dots i{width:54px;height:54px;border-radius:50%;border:2px dashed rgba(18,19,22,.25);transition:all .3s}
+.dots i.on{border:0;background:var(--on);box-shadow:0 0 0 6px rgba(47,174,75,.15)}
+.count{font-family:Doto,monospace;font-weight:800;font-size:28px;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
+<div class="veil"></div>
+<div class="phone">
+  
+  <section id="ask">
+    <div class="head">
+            <div class="line">One last question.</div>
+      <div class="sub">Were these made by humans?</div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="wait" id="wait" aria-live="polite">
+        <div class="line">Three humans must vouch for you.</div>
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="count" id="count">0 / 3</div>
+  </section>
+
+  <div class="btns">
+    <button class="pri" type="button" id="submit" disabled>Submit</button>
+    <button type="button" id="vouch" hidden>I vouch this person is human</button>
+  </div>
+</div>
+<script src="flow.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+// Samples: other visitors' answers mixed with agent-made ones. Placeholder content.
+const M=[
+  {src:'Visitor #031 · 21:14',text:'"the smell of my grandmas cupboard?? like old oranges and soap"',who:'human'},
+  {src:'Visitor #039 · 22:02',text:'"Petrichor on a warm summer evening, a scent that always reminds me of home."',who:'agent'},
+  {src:'Visitor #044 · 23:40',text:'"mosquito coil. i hated it. now i miss it"',who:'human'}
+];
+const pick={};
+M.forEach((m,i)=>{
+  const c=document.createElement('div');c.className='card';c.id='c'+i;
+  c.innerHTML=`<div class="src">Sample ${i+1}</div><p>${m.text}</p><div class="seg" role="group" aria-label="Sample ${i+1}"><button type="button" data-v="human" aria-pressed="false">Human</button><button type="button" data-v="agent" aria-pressed="false">Agent</button></div>`;
+  c.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    pick[i]=b.dataset.v;c.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    $('submit').disabled=Object.keys(pick).length<M.length;
+  });
+  $('cards').appendChild(c);
+});
+$('submit').onclick=()=>{
+  M.forEach((m,i)=>{const c=$('c'+i);c.classList.add('reveal',m.who==='human'?'hu':'ag');c.querySelector('.src').textContent=m.src+' · '+(m.who==='human'?'Human':'Agent');});
+  $('submit').disabled=true;
+  setTimeout(()=>{$('ask').style.display='none';$('wait').style.display='block';$('submit').hidden=true;$('vouch').hidden=false;$('vouch').focus();},2600);
+};
+let n=0;
+$('vouch').onclick=()=>{
+  if(n>=3)return;
+  document.querySelectorAll('.dots i')[n].classList.add('on');n++;$('count').textContent=n+' / 3';
+  if(n===3){$('vouch').disabled=true;setTimeout(()=>flowNext(),1200);}
+};
+</script>
+</body>
+</html>
