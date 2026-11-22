@@ -29,6 +29,12 @@
         ],
         "createdAt": "2026-11-21T11:29:28.118Z",
         "reason": "Claude: scrolling marquee is a deliberate period element of the GeoCities-style page the user asked to replicate"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-22T01:06:26.634Z",
+        "reason": "Claude judgement: Stage 1 deliberately imitates a standard Google/Cloudflare-style verification portal (user asked for 'standard' system); neutral body face is the point, Doto carries personality"
       }
     ]
   }

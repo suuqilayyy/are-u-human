@@ -3,55 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prove you are human</title>
+<title>Human Verification Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <style>
-:root{--ink:#121316;--sub:#5d6270}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{overflow:hidden;background:#7fb2ea;font-family:Inter,-apple-system,"SF Pro Text",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
-.behind{position:fixed;inset:0;border:0;width:100%;height:100%;pointer-events:none;filter:blur(16px) saturate(.7);transform:scale(1.05)}
-.veil{position:fixed;inset:0;background:rgba(236,239,245,.35)}
-
-.phone{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(400px,100vw);height:min(860px,100dvh);
-  display:flex;flex-direction:column;align-items:center;padding:28px 22px 22px;border-radius:40px;
-  background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(30px) saturate(1.4);backdrop-filter:blur(30px) saturate(1.4);
-  border:1px solid rgba(255,255,255,.6);box-shadow:0 30px 80px rgba(20,30,60,.2),inset 0 1px 0 rgba(255,255,255,.8)}
-@media (max-width:480px){.phone{border-radius:0;height:100dvh;border:0}}
-
-.head{margin-top:auto;text-align:center;padding:0 6px}
-.step{font-family:Doto,monospace;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:18px}
-h1{font-family:Doto,ui-monospace,monospace;font-weight:800;font-size:clamp(34px,11vw,48px);letter-spacing:.01em;line-height:1.05;margin:0 0 22px}
-p{font-size:16px;color:var(--sub);line-height:1.5;margin:0 0 8px;text-wrap:pretty}
-
-.btns{margin-top:auto;width:100%}
-.btns button{width:100%;height:52px;border-radius:99px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:500 16px Inter,sans-serif;cursor:pointer}
-.btns button:active{transform:scale(.985)}
-.btns button:focus-visible{outline:3px solid #2fae4b;outline-offset:3px}
-/* 背景候选，?bg=mono|grey|dark 切换，定了再删 */
-body.bg-mono .behind{filter:blur(16px) grayscale(1) brightness(1.08)}
-body.bg-mono{background:#d9d9d6}
-body.bg-grey .behind,body.bg-grey .veil{display:none}
-body.bg-grey{background:#e8e8e6}
-body.bg-dark .behind{filter:blur(18px) grayscale(1) brightness(.35)}
-body.bg-dark{background:#151618}
-body.bg-dark .veil{background:rgba(10,10,12,.35)}
+body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased}
+.phone{width:min(420px,100%);min-height:100dvh;margin:0 auto;display:flex;flex-direction:column;align-items:center;padding:var(--s-6) var(--s-5) var(--s-6)}
+.head{margin-top:auto;text-align:center}
+.logo{display:block;margin:0 auto var(--s-5);height:clamp(170px,28dvh,230px);width:auto}
+/* dot-matrix title: her choice on 11-22, not code type */
+h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-display);letter-spacing:.01em;line-height:var(--lh-tight);color:var(--accent);margin:0 0 var(--s-5)} /* taste-skill-ignore */
+.lead{font-size:var(--fs-lead);line-height:1.35;color:var(--text);margin:0 0 var(--s-2);text-wrap:balance}
+.meta{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-sub);margin:0;text-wrap:pretty}
+.go{margin-top:auto}
+.stag{opacity:0;transform:translateY(6px);animation:in var(--dur-slow) var(--ease-out) forwards}
+@keyframes in{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.stag{animation:none;opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<script>var b=new URLSearchParams(location.search).get("bg");if(b)document.body.className="bg-"+b;</script>
-<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
-<div class="veil"></div>
 <main class="phone">
   <div class="head">
-        <h1>Prove you<br>are human</h1>
-    <p>Neverland is for humans only.</p>
-    <p>Before you go in, we need to verify that you are human.</p>
+    <img class="logo stag" src="assets/img/logo.png" alt="Human Verification Portal logo">
+    <h1 class="stag" style="animation-delay:.06s">Human<br>Verification<br>Portal</h1>
+    <p class="lead stag" style="animation-delay:.14s">We need to make sure you're human.</p>
+    <p class="meta stag" style="animation-delay:.2s">Neverland is for humans only.</p>
   </div>
-  <div class="btns">
-    <button type="button" onclick="location.href='face.html'">Start verification</button>
-  </div>
+  <button class="btn btn-primary go stag" style="animation-delay:.35s" type="button" onclick="location.href='face.html'">Start verification</button>
 </main>
 <script src="flow.js"></script>
 </body>

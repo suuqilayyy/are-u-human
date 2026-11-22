@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Gate · Face Proof</title>
+<title>Human Verification Portal · Face</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <style>
 :root{--ink:#121316;--sub:#5d6270;--tick:#c9ccd3;--on:#2fae4b;--bad:#e0483e}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{overflow:hidden;background:#7fb2ea;font-family:Inter,-apple-system,"SF Pro Text",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+body{overflow:hidden;background:#7fb2ea;font-family:var(--font-body);color:var(--ink);-webkit-font-smoothing:antialiased}
 .behind{position:fixed;inset:0;border:0;width:100%;height:100%;pointer-events:none;filter:blur(16px) saturate(.7);transform:scale(1.05)}
 .veil{position:fixed;inset:0;background:rgba(236,239,245,.35)}
 
@@ -44,7 +45,7 @@ body{overflow:hidden;background:#7fb2ea;font-family:Inter,-apple-system,"SF Pro 
 
 .btns{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:10px}
 .btns button{height:52px;border-radius:99px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.55);
-  font:500 16px Inter,sans-serif;color:var(--ink);cursor:pointer}
+  font:500 16px var(--font-body);color:var(--ink);cursor:pointer}
 .btns button.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
 .btns button:active{transform:scale(.985)}
 
@@ -52,7 +53,7 @@ body{overflow:hidden;background:#7fb2ea;font-family:Inter,-apple-system,"SF Pro 
 .gate div{width:min(340px,calc(100% - 32px));text-align:center;background:rgba(255,255,255,.75);border-radius:28px;padding:28px 24px;}
 .gate h1{font-size:21px;margin:0 0 8px;letter-spacing:-.01em}
 .gate p{margin:0 0 18px;color:var(--sub);font-size:14px;line-height:1.5}
-.gate button{height:46px;width:100%;border:0;border-radius:99px;background:var(--ink);color:#fff;font:500 15px Inter,sans-serif;cursor:pointer}
+.gate button{height:46px;width:100%;border:0;border-radius:99px;background:var(--ink);color:#fff;font:500 15px var(--font-body);cursor:pointer}
 .gate .err{color:var(--bad);font-size:12px;margin-top:10px}
 
 /* ---- C · 极简 (11-22 她定的 Stage 1 风格)，覆盖上面的毛玻璃 ---- */
@@ -60,29 +61,34 @@ body{background:#fff}
 .behind,.veil{display:none}
 .phone{background:transparent;border:0;box-shadow:none;}
 .top{color:#a8a8a8;font-size:11px}.top b{color:#8a8a8a;font-weight:500}
-.ring line{stroke:#ececec;stroke-width:2.4}
-.ring line.on,.ring.bad line.on{stroke:#111}
-.lens{background:#d9d9d9}
-.step{font-family:Inter,sans-serif;font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:none;color:#a8a8a8}
-.line{font-weight:400;letter-spacing:-.02em}
+.ring line{stroke:var(--gray-200);stroke-width:2.4}
+.ring line.on,.ring.bad line.on{stroke:var(--accent);stroke-width:3.4}
+.ring line{transition:stroke .35s var(--ease-out),stroke-width .35s var(--ease-out)}
+.gicon{display:block;margin:0 auto 16px;filter:invert(30%) sepia(40%) saturate(700%) hue-rotate(155deg)}
+.lens{background:var(--brand-100)}
+.step{font-family:var(--font-body);font-weight:500;font-size:11px;letter-spacing:.04em;text-transform:none;color:#a8a8a8}
+.line{font-weight:400;letter-spacing:-.025em;font-size:28px;line-height:1.15}
 .line.big{font-size:30px}
-.msg.bad .line{color:#111}
+.msg.bad .line{color:var(--text)}
 .sub{font-size:13px;color:#8a8a8a}
 .readout{display:none}
 .step{display:none}
-.count{font:200 96px Inter,sans-serif;text-shadow:0 1px 16px rgba(0,0,0,.25)} /* taste-skill-ignore: scrim for type over live video */
+.count{font:200 96px var(--font-body)}
 .axis{position:relative;width:min(300px,80%);height:30px;margin:18px auto 0;opacity:0;transition:opacity .4s}
 .axis.on{opacity:1}
 .axis .ln{position:absolute;top:14px;left:0;right:0;height:1px;background:#d6d6d6}
-.axis .hb{position:absolute;top:12px;height:5px;background:#111}
-.axis .me{position:absolute;top:9px;width:11px;height:11px;border-radius:50%;background:#111;transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.8,.2,1)}
+.axis .hb{position:absolute;top:12px;height:5px;background:var(--brand-300)}
+.axis .me{position:absolute;top:9px;width:11px;height:11px;border-radius:50%;background:var(--accent);transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.8,.2,1)}
 .axis .lb{position:absolute;white-space:nowrap;top:24px;font-size:10px;color:#a8a8a8;transform:translateX(-50%);font-variant-numeric:tabular-nums}
 .btns{flex-direction:row;justify-content:center;gap:22px}
-.btns button,.btns button.pri{height:auto;border:0;background:none;font:400 12px Inter,sans-serif;color:#a8a8a8;padding:8px 4px}
-.btns button.pri{color:#111;font-weight:500;font-size:15px;border-bottom:1px solid #111;border-radius:0}
+.btns button,.btns button.pri{height:auto;border:0;background:none;font:400 12px var(--font-body);color:#a8a8a8;padding:8px 4px}
+.btns button.pri{color:var(--accent);font-weight:500;font-size:15px;border-bottom:1px solid var(--accent);border-radius:0}
 .gate{background:#fff;}
 .gate div{background:none;box-shadow:none}
-.gate h1{font-weight:400;font-size:24px}
+.gate h1{font-weight:400;font-size:var(--fs-title);color:var(--text)}
+.gate p{font-size:var(--fs-body)}
+.gate button{height:var(--btn-h);background:var(--accent);font-size:var(--fs-body)}
+.gate button:hover{background:var(--accent-hover)}
 /* Stage 1 choreography: one thing moves at a time */
 .ring{transition:opacity .25s ease-out}
 .ring.dim{opacity:0}
@@ -97,6 +103,22 @@ body{background:#fff}
 .line{transition:opacity .25s,transform .35s cubic-bezier(.05,.7,.1,1)}
 .sub{transition:opacity .25s .12s,transform .35s .12s cubic-bezier(.05,.7,.1,1)}
 .msg.swap .line,.msg.swap .sub{transition:opacity .15s,transform .15s}
+/* countdown happens behind a white veil; measuring is the clear, live lens */
+.lens .veil{position:absolute;inset:0;background:rgba(255,255,255,.62);opacity:0;transition:opacity .3s ease-out;pointer-events:none}
+.lens .veil.on{opacity:1}
+.count{color:var(--accent);text-shadow:none}
+/* the reason reads as a sentence, not a caption */
+.sub{font-size:var(--fs-body);color:var(--gray-700);line-height:1.45;max-width:320px;margin:12px auto 0}
+.sub .n{font-variant-numeric:tabular-nums}
+.axis{margin-top:26px;height:44px}
+.axis .lb{top:24px;font-size:12px;color:var(--accent)}
+.axis .lh{position:absolute;top:24px;font-size:12px;color:#8a8a8a;white-space:nowrap;transform:translateX(-50%)}
+.retry{margin-top:auto;width:100%;height:52px;border:0;border-radius:var(--r-pill);background:var(--accent);color:#fff;font:500 var(--fs-body) var(--font-body);cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .35s cubic-bezier(.05,.7,.1,1),transform .35s cubic-bezier(.05,.7,.1,1)}
+.retry.in{opacity:1;transform:none}
+.retry:active{transform:scale(.98)}
+.retry:hover{background:var(--accent-hover)}
+.retry:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.retry:not([hidden])~.btns{margin-top:8px}
 </style>
 </head>
 <body>
@@ -107,7 +129,7 @@ body{background:#fff}
   
   <div class="view">
     <svg class="ring" id="ring" viewBox="0 0 200 200" aria-hidden="true"></svg>
-    <div class="lens"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="flash" id="flash"></div></div>
+    <div class="lens"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="veil" id="veil"></div><div class="flash" id="flash"></div></div>
     <div class="count" id="count" aria-hidden="true"></div>
   </div>
   <div class="msg" id="msg" aria-live="polite">
@@ -115,8 +137,9 @@ body{background:#fff}
     <div class="line big" id="line">Look at the camera.</div>
     <div class="sub" id="sub"></div>
     <div class="readout" id="ro"></div>
-    <div class="axis" id="axis" aria-hidden="true"><div class="ln"></div><div class="hb"></div><div class="me"></div><div class="lb" id="axl"></div></div>
+    <div class="axis" id="axis" aria-hidden="true"><div class="ln"></div><div class="hb"></div><div class="me"></div><div class="lh" id="axh">Humans</div><div class="lb" id="axl"></div></div>
   </div>
+  <button type="button" class="retry" id="retry" hidden>Try again</button>
   <div class="btns">
     <button type="button" id="a11y">Accessibility options</button>
     <button type="button" id="over">Start over</button>
@@ -124,9 +147,10 @@ body{background:#fff}
 </div>
 
 <div class="gate" id="gate"><div>
-  <h1>Show me your face.</h1>
-  <p>Your camera feed is analysed on this device and never uploaded.</p>
-  <button id="go" type="button">Allow camera</button>
+  <img class="gicon" src="assets/svg/scan-face.svg" alt="" width="56" height="56">
+  <h1>Face Verification</h1>
+  <p>Position your face in the frame, then move your head slowly to complete the circle. Your camera feed stays on this device.</p>
+  <button id="go" type="button">Get Started</button>
   <div class="err" id="err"></div>
 </div></div>
 
@@ -176,7 +200,7 @@ const OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,3
 
 // ---- flow ----
 let tries=0;
-function axis(rate){const a=$('axis');if(rate==null){a.classList.remove('on');return;}const x=v=>Math.max(2,Math.min(98,v/60*100));a.querySelector('.hb').style.cssText=`left:${x(12)}%;width:${x(22)-x(12)}%`;a.querySelector('.me').style.left=x(rate)+'%';$('axl').style.left=x(rate)+'%';$('axl').textContent=rate+' / min';a.classList.add('on');}
+function axis(rate){const a=$('axis');if(rate==null){a.classList.remove('on');return;}const x=v=>Math.max(2,Math.min(98,v/60*100));a.querySelector('.hb').style.cssText=`left:${x(12)}%;width:${x(22)-x(12)}%`;a.querySelector('.me').style.left=x(rate)+'%';$('axl').style.left=x(rate)+'%';$('axl').textContent='You · '+rate;$('axh').style.left=x(17)+'%';const far=Math.abs(rate-17)<14;$('axh').style.top=far?'-8px':'24px';a.classList.add('on');}
 function showCount(n){const c=$('count');if(!n){c.classList.remove('on');return;}c.textContent=n;c.classList.remove('on');void c.offsetWidth;c.classList.add('on');}
 let S=null,sT=0,mem={},highlight=null,blinks=0,closed=false,frame=0,lastT=-1;
 const el=()=>(performance.now()-sT)/1000;
@@ -195,33 +219,50 @@ async function sayA(line,sub,big){const m=$('msg');m.classList.add('swap');await
   $('line').textContent=line;$('line').classList.toggle('big',!!big);$('sub').textContent=sub||'';m.classList.remove('bad');m.classList.remove('swap');await wait(sub?420:300);}
 function sweep(dur,curve){return new Promise(res=>{const t0=performance.now();const f=now=>{const k=Math.min(1,(now-t0)/dur);progress(curve?curve(k):k);if(k<1)requestAnimationFrame(f);else res();};requestAnimationFrame(f);});}
 async function resetRing(){ring.classList.add('dim');await wait(260);progress(0);ring.classList.remove('dim');await wait(120);}
-async function countdown(){for(const n of [3,2,1]){const c=$('count');c.className='count';c.textContent=n;void c.offsetWidth;c.classList.add('on');await wait(820);}$('count').classList.add('off');await wait(220);}
+async function countdown(){$('veil').classList.add('on');await wait(200);for(const n of [3,2,1]){const c=$('count');c.className='count';c.textContent=n;void c.offsetWidth;c.classList.add('on');await wait(820);}$('count').classList.add('off');$('veil').classList.remove('on');await wait(220);}
 function flash(){const f=$('flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');}
 function shake(){const v=document.querySelector('.view');v.classList.remove('shake');void v.offsetWidth;v.classList.add('shake');}
-async function measure(){blinkTs=[];measuring=true;await sweep(5000);measuring=false;
+let covert=false,hud=false;
+async function measure(){blinkTs=[];measuring=true;const lv=setInterval(()=>{if(covert)return;const k=blinkTs.length;$('sub').textContent=k+(k===1?' blink':' blinks');},100);await sweep(5000);clearInterval(lv);measuring=false;
   $('msg').classList.add('swap');ring.classList.add('think');await wait(1100);ring.classList.remove('think');return blinkTs.length;}
-async function attempt(intro){await sayA(intro,'');await wait(700);await resetRing();await countdown();return measure();}
+async function attempt(hide){covert=!!hide;
+  if(hide){await sayA('Hold still.','');await resetRing();await countdown();await sayA('Scanning…','');return measure();}
+  await sayA('Get ready to blink.','');await resetRing();await countdown();await sayA('Blink normally.','0 blinks');return measure();}
+function askRetry(label){return new Promise(res=>{const b=$('retry');b.textContent=label;b.hidden=false;void b.offsetWidth;b.classList.add("in");
+  b.onclick=async()=>{b.onclick=null;b.classList.remove('in');await wait(250);b.hidden=true;res();};});}
 async function stage1(run){
   const live=()=>run===stage1Run;
-  await sweep(900,easeOut);await wait(150);if(!live())return;
-  await sayA('I see you.','');await wait(1100);if(!live())return;
-  tries=1;let c=await attempt('Blink normally.');if(!live())return;const rate=c*12;
-  shake();
-  if(!c)await sayA("You didn't blink.",'Humans blink about 17 times a minute at rest. Are you a photo?');
-  else if(rate<12||rate>22)await sayA(`Too ${rate>22?'fast':'slow'}.`,`${c} blink${c>1?'s':''} in 5 seconds. That's ${rate} a minute. Humans blink about 17 times a minute at rest.`);
-  else await sayA('Suspiciously normal.',`${rate} a minute is right on the human average. Agents aim for the average.`);
-  axis(rate);await wait(4200);axis(null);await wait(300);if(!live())return;
-  tries=2;c=await attempt('Try again.');if(!live())return;
-  shake();await sayA(c?'Your blinks were deliberate.':'You stopped blinking.',"Humans don't think about blinking.");await wait(3200);if(!live())return;
-  tries=3;await attempt('One more time.');if(!live())return;
+  await sayA('Face scan complete.','',true);await wait(1400);if(!live())return;
+  await sayA('One more check.','');await wait(900);if(!live())return;
+  tries=1;let c=await attempt(true);if(!live())return;const rate=c*12;
+  shake();hud=true;
+  // out of nowhere: it was watching your eyes all along
+  if(rate>22)await sayA('You blink too often.',`${c} times in 5 seconds is ${rate} a minute. Humans blink about 17.`);
+  else if(rate<12)await sayA('Your eyes are too still.',`You didn't blink once in 5 seconds. Humans blink about 17 times a minute.`);
+  else await sayA('Suspiciously normal.',`You blinked ${rate} times a minute, right on the human average. Agents aim for the average.`);
+  axis(rate);await askRetry('Try again');axis(null);if(!live())return;
+  tries=2;c=await attempt();if(!live())return;
+  shake();await sayA(c?'Your blinks were deliberate.':'You stopped blinking.',"Humans don't think about blinking.");
+  await askRetry('Try again');if(!live())return;
+  tries=3;await attempt();if(!live())return;
   await sayA("Now that's human.",'You stopped trying.');await wait(3800);if(!live())return;
   go('neutral');
 }
 const STEPS={
-  lock:{enter(){stage1Run++;tries=0;axis(null);progress(0);$('line').textContent='';sayA('Look at the camera.','',true);},
-    tick(f){mem.ok=f.pts?(mem.ok||0)+1:0;if(mem.ok>24){S='busy';stage1(stage1Run);}}},
+  lock:{enter(){stage1Run++;tries=0;hud=false;axis(null);progress(0);$('line').textContent='';sayA('Position your face in the frame.','',true);},
+    tick(f){if(!f.pts){mem.ok=0;return;}
+      if(f.size<.32){if(mem.hint!=='far'){mem.hint='far';sayA('Move closer.','',true);}mem.ok=0;return;}
+      if(f.off>.22){if(mem.hint!=='off'){mem.hint='off';sayA('Center your face in the frame.','',true);}mem.ok=0;return;}
+      mem.ok=(mem.ok||0)+1;if(mem.ok>18)go('circle');}},
+  // Face ID-style enrollment: ticks light where your head points.
+  circle:{enter(){ticks.forEach(t=>t.classList.remove('on'));shown=-1;mem.lit=new Set();sayA('Move your head slowly to complete the circle.','');},
+    tick(f){if(!f.pts)return;
+      if(f.mag>.09){const a=Math.atan2(f.dy,f.dx),c=Math.round(((a+Math.PI/2)/(2*Math.PI))*N);for(let k=-3;k<=3;k++){const i=((c+k)%N+N)%N;if(!mem.lit.has(i)){mem.lit.add(i);ticks[i].classList.add('on');}}}
+      // nobody completes it perfectly; after a while the gaps close on their own
+      if(el()>14&&!mem.fill){mem.fill=1;ticks.forEach((t,i)=>setTimeout(()=>t.classList.add('on'),i*12));setTimeout(()=>{if(S==='circle'){S='busy';stage1(stage1Run);}},N*12+300);return;}
+      if(mem.lit.size>=N*.92&&!mem.fill){mem.fill=1;ticks.forEach(t=>t.classList.add('on'));shown=N;setTimeout(()=>{if(S==='circle'){S='busy';stage1(stage1Run);}},350);}}},
   // Stage 1 · blink. Fails twice no matter what (real data only picks the wording), passes on the third try.
-  busy:{tick(f){if(measuring&&f.blinked){blinkTs.push(performance.now());flash();}}},
+  busy:{tick(f){if(measuring&&f.blinked){blinkTs.push(performance.now());if(!covert)flash();}}},
   neutral:{enter(){say('2 of 4 · Expression','Keep a neutral face.','Hold it for 3 seconds. Do not smile.');mem.h=0;mem.lt=performance.now();},
     tick(f){if(waiting())return;const now=performance.now(),dt=(now-mem.lt)/1000;mem.lt=now;
       if(performance.now()-lastSay<READ&&!mem.started){progress(0);return;}mem.started=1;
@@ -254,7 +295,7 @@ const STEPS={
   verdict:{enter(){progress(1,true);say('Result','Face proof not passed.','Your face matches 0 known humans and 3,124 generated faces.',true);$('over').textContent='Continue to Stage 2';$('over').classList.add('pri');$('over').onclick=()=>flowNext();}}
 };
 
-$('over').onclick=()=>{if(S){showCount('');go('lock');}};
+$('over').onclick=()=>{if(S){showCount('');const r=$('retry');r.hidden=true;r.classList.remove('in');$('veil').classList.remove('on');go('lock');}};
 $('a11y').onclick=()=>{const keep=[$('sn').textContent,$('line').textContent,$('sub').textContent,$('msg').classList.contains('bad')];
   say('Accessibility','Accessibility options are available','to verified humans.',true);setTimeout(()=>say(...keep),3200);};
 
@@ -275,7 +316,7 @@ function loop(now){
     const [cx,cy]=map(pts[168].x,pts[168].y);
     const ringPts=OVAL.map(i=>{const [x,y]=map(pts[i].x,pts[i].y);return [cx+(x-cx)*1.18,cy+(y-cy)*1.18];});
     const along=t=>{t=((t%1)+1)%1;const q=t*ringPts.length,i=q|0,k=q-i,p=ringPts[i],r=ringPts[(i+1)%ringPts.length];return [p[0]+(r[0]-p[0])*k,p[1]+(r[1]-p[1])*k];};
-    for(let i=0;i<10;i++){const [x,y]=along(i/10+now/16000+.015*Math.sin(now/900+i));box(x,y,(7+2*Math.sin(i*2.3))*dpr,.25+.2*(.5+.5*Math.sin(now/500+i)));}
+    if(hud)for(let i=0;i<10;i++){const [x,y]=along(i/10+now/16000+.015*Math.sin(now/900+i));box(x,y,(7+2*Math.sin(i*2.3))*dpr,.25+.2*(.5+.5*Math.sin(now/500+i)));}
   }
   if(highlight)objs.forEach(d=>{const c=d.categories[0];if(!c||c.categoryName!==highlight)return;const bb=d.boundingBox,vw=v.videoWidth,vh=v.videoHeight;
     const [x1,y1]=map(bb.originX/vw,bb.originY/vh),[x2,y2]=map((bb.originX+bb.width)/vw,(bb.originY+bb.height)/vh);
@@ -285,7 +326,11 @@ function loop(now){
   const smile=((bs.mouthSmileLeft||0)+(bs.mouthSmileRight||0))/2;
   const names=objs.map(d=>d.categories[0]&&d.categories[0].categoryName).filter(n=>n&&n!=='person');
   $('ro').textContent=pts?`Blinks ${blinks} · Smile ${smile*100|0}%`:'No face';
-  if(S&&STEPS[S].tick)STEPS[S].tick({pts,blinked,smile,names});
+  let geo={};
+  if(pts){const [nx,ny]=map(pts[1].x,pts[1].y),[lx]=map(pts[234].x,pts[234].y),[rx]=map(pts[454].x,pts[454].y),[,ty]=map(pts[10].x,pts[10].y),[,by]=map(pts[152].x,pts[152].y);
+    const w=Math.abs(rx-lx),mx=(lx+rx)/2,my=(ty+by)/2;
+    geo={dx:(nx-mx)/w,dy:(ny-my)/(by-ty)-.08,size:w/cv.width,off:Math.hypot(mx/cv.width-.5,my/cv.height-.5)};geo.mag=Math.hypot(geo.dx,geo.dy);}
+  if(S&&STEPS[S].tick)STEPS[S].tick({pts,blinked,smile,names,...geo});
 }
 </script>
 <script src="flow.js"></script>

@@ -1,0 +1,76 @@
+/* Human Verification Portal · design tokens (Stage 1 and up)
+   Brand blue is sampled from the logo: 200 = logo face #B4D6E2, 300 = logo shade #98BCC8.
+   Everything darker is the same hue (~195°) pushed down for text and buttons.
+   Danger red is the logo's face-tracking bracket #CB3E34. Ink is the logo's black. */
+:root{
+  /* brand */
+  --brand-50:#f0f7fa;
+  --brand-100:#dcedf3;
+  --brand-200:#b4d6e2;  /* logo */
+  --brand-300:#98bcc8;  /* logo shade */
+  --brand-400:#6a9aab;
+  --brand-500:#3f7a8f;
+  --brand-600:#2c6378;  /* text + primary, 6.6:1 on white */
+  --brand-700:#214d5e;  /* hover / pressed */
+  --brand-800:#183946;
+  --brand-900:#10262f;
+
+  /* neutral */
+  --ink:#191b1a;        /* logo black */
+  --gray-700:#3d4245;
+  --gray-500:#6b7275;   /* secondary text, 4.8:1 */
+  --gray-300:#c9cfd2;
+  --gray-200:#e3e7e9;
+  --gray-100:#f2f4f5;
+  --white:#fff;
+
+  /* semantic */
+  --bg:var(--white);
+  --text:var(--ink);
+  --text-sub:var(--gray-500);
+  --accent:var(--brand-600);
+  --accent-hover:var(--brand-700);
+  --accent-soft:var(--brand-100);
+  --line:var(--gray-200);
+  --danger:#cb3e34;     /* logo bracket */
+  --danger-soft:#fbe9e7;
+  --success:#2e7d4f;
+
+  /* type */
+  --font-display:Doto,ui-monospace,monospace;
+  --fw-display:800;
+  --font-body:Inter,-apple-system,"SF Pro Text",sans-serif;
+  --fs-display:clamp(40px,11.5vw,54px);
+  --fs-title:28px;
+  --fs-lead:21px;
+  --fs-body:17px;
+  --fs-small:14px;
+  --fs-caption:12px;
+  --lh-tight:1.08;
+  --lh-body:1.5;
+
+  /* space (4pt) */
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;
+
+  /* radius */
+  --r-sm:8px;--r-md:14px;--r-lg:24px;--r-pill:999px;
+
+  /* motion */
+  --ease-out:cubic-bezier(.05,.7,.1,1);
+  --dur-fast:.15s;--dur:.3s;--dur-slow:.45s;
+
+  /* component sizes */
+  --btn-h:54px;
+}
+
+/* ---- components ---- */
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:var(--btn-h);border:0;border-radius:var(--r-pill);
+  font:500 var(--fs-body)/1 var(--font-body);cursor:pointer;transition:background var(--dur-fast),transform var(--dur-fast) ease-out}
+.btn:active{transform:scale(.98)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--accent-soft);color:var(--brand-800)}
+.btn-secondary:hover{background:var(--brand-200)}
+.btn-text{width:auto;height:auto;padding:var(--s-2) var(--s-1);background:none;color:var(--text-sub);font-size:var(--fs-small)}
+.btn-text:hover{color:var(--text)}
