@@ -1,0 +1,28 @@
+name: Deploy to Seoul
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+concurrency:
+  group: neverland-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Publish current main
+        env:
+          SSH_KEY: ${{ secrets.SEOUL_DEPLOY_KEY }}
+          KNOWN_HOST: ${{ vars.SEOUL_KNOWN_HOST }}
+          HOST: ${{ vars.SEOUL_HOST }}
+        run: |
+          install -d -m 700 ~/.ssh
+          umask 077
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/neverland
+          printf '%s\n' "$KNOWN_HOST" > ~/.ssh/known_hosts
+          ssh -T -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes \
+            -o ConnectTimeout=20 -i ~/.ssh/neverland "neverland-deploy@$HOST" deploy

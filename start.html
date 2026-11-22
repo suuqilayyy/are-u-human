@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Human Verification Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800;900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
 <style>
 *{box-sizing:border-box}
@@ -15,7 +15,11 @@ body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit
 .head{text-align:left}
 .logo{display:block;margin:0 0 var(--s-5) -8px;height:clamp(170px,28dvh,230px);width:auto}
 /* dot-matrix title: her choice on 11-22, not code type */
-h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-display);letter-spacing:.01em;line-height:var(--lh-tight);color:var(--accent);margin:0 0 var(--s-5)} /* taste-skill-ignore */
+h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-display);letter-spacing:.01em;line-height:var(--lh-tight);color:var(--ink);margin:0 0 var(--s-5)} /* taste-skill-ignore */
+/* 11-22: E + F. HUMAN on red tape, heavy ink title, spellcheck squiggle on "human" */
+h1{font-weight:900}
+.tape{background:var(--danger);color:#fff;padding:0 .1em;margin-left:-.1em}
+.typo{text-decoration:underline wavy var(--danger);text-decoration-thickness:1.5px;text-underline-offset:.22em;text-decoration-skip-ink:none}
 .lead{font-size:var(--fs-lead);line-height:1.35;color:var(--text);margin:0;text-wrap:pretty}
 
 /* full-bleed bar at the bottom: the whole strip is the button */
@@ -52,8 +56,8 @@ h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(-
 <main class="phone">
   <div class="head">
     <img class="logo stag" src="assets/img/logo.png" alt="Human Verification Portal logo">
-    <h1 class="stag" style="animation-delay:.06s">Human<br>Verification<br>Portal</h1>
-    <p class="lead stag" style="animation-delay:.14s">We need to make sure you're human.</p>
+    <h1 class="stag" style="animation-delay:.06s"><span class="tape">HUMAN</span><br>Verification<br>Portal</h1>
+    <p class="lead stag" style="animation-delay:.14s">We need to make sure you're <span class="typo">human</span>.</p>
   </div>
 </main>
 <button class="bar stag" style="animation-delay:.3s" type="button" id="start">
