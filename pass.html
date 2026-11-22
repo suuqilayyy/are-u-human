@@ -25,6 +25,7 @@ svg.dd{position:absolute;overflow:visible;pointer-events:none;filter:url(#wob)}
 .A .meta b{font-weight:400;font-size:22px;display:block;line-height:1.1}
 .A .rule{position:absolute;left:18px;right:18px;bottom:12px;border-top:1.5px dashed #c8c8c2;padding-top:7px;font-family:var(--hand);font-size:12px;line-height:1.3}
 .A .rule .zh{display:block;font-size:10.5px;color:var(--sub);margin-top:2px}
+html:lang(en) .A .rule .zh{display:none}
 .basis{margin-top:28px;text-align:center}
 </style>
 <script src="i18n/messages.js"></script>
@@ -36,12 +37,12 @@ svg.dd{position:absolute;overflow:visible;pointer-events:none;filter:url(#wob)}
 <div class="veil"></div>
 <div class="phone">
   <div class="card A" id="A" aria-label="Human Pass" data-i18n-aria-label="pass.label">
-    <div class="t hand">HUMAN PASS</div>
-    <div class="meta hand"><b>No.0047</b>verified human<br>Neverland</div>
-    <div class="rule">you still need to verify at least once every 24 hours to stay human.<span class="zh">你仍需至少每 24 小时验证一次，以保持人类认证。</span></div>
+    <div class="t hand" lang="en">HUMAN PASS</div>
+    <div class="meta hand" lang="en"><b>No.0047</b>verified human<br>Neverland</div>
+    <div class="rule" lang="en">you still need to verify at least once every 24 hours to stay human.<span class="zh" lang="zh-CN">要继续当人类，每 24 小时至少要再验证一次。</span></div>
   </div>
   <div class="basis">
-    <div class="line" data-i18n="pass.basis">You are human.</div>
+    <div class="line" lang="en" data-i18n="pass.basis">You are human.</div>
   </div>
   <div class="btns"><button class="pri" type="button" onclick="flowNext()" data-i18n="pass.enter">Enter Neverland</button></div>
 </div>

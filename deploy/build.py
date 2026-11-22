@@ -28,7 +28,8 @@ for host, pages in groups.items():
     root = args.output / host
     root.mkdir()
     for asset in (source / "assets").rglob("*"):
-        if asset.is_file() and asset.suffix.lower() in {".png", ".jpg", ".svg", ".gif", ".webp", ".jpeg", ".avif", ".woff", ".woff2", ".ttf"}:
+        portal_font_asset = (source / "assets/fonts/portal") in asset.parents
+        if asset.is_file() and (portal_font_asset or asset.suffix.lower() in {".png", ".jpg", ".svg", ".gif", ".webp", ".jpeg", ".avif", ".woff", ".woff2", ".ttf"}):
             dest = root / asset.relative_to(source)
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(asset, dest)

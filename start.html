@@ -5,9 +5,8 @@
 <link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title data-i18n="start.title">Human Verification Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800;900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="assets/fonts/portal/fonts.css">
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -54,6 +53,8 @@ h1{font-weight:900}
 .languages{position:absolute;top:max(8px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:6;color:var(--gray-500);font:12px/1 var(--font-body)}
 .languages a{display:inline-flex;min-height:36px;align-items:center;padding:0 5px;color:inherit;text-decoration:none}
 .languages a[aria-current]{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+html:lang(zh-CN){--font-body:Inter,PortalSans,"PingFang SC",sans-serif}
+html:lang(zh-CN) .lead{font-family:PortalSong,"Songti SC",serif}
 </style>
 <script src="i18n/messages.js"></script>
 <script src="i18n.js"></script>
@@ -65,7 +66,7 @@ h1{font-weight:900}
 <main class="phone">
   <div class="head">
     <img class="logo stag" src="assets/img/logo.png" alt="Human Verification Portal logo" data-i18n-alt="start.logo">
-    <h1 class="stag" style="animation-delay:.06s" data-i18n-html="start.heading"><span class="tape">HUMAN</span><br>Verification<br>Portal</h1>
+    <h1 class="stag" style="animation-delay:.06s" lang="en" data-i18n-html="start.heading"><span class="tape">HUMAN</span><br>Verification<br>Portal</h1>
     <p class="lead stag" style="animation-delay:.14s" data-i18n-html="start.lead">We need to make sure you're <span class="typo">human</span>.</p>
   </div>
 </main>

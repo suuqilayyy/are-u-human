@@ -5,9 +5,8 @@
 <link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title data-i18n="stage2.title">Human Verification Portal | Intuition</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="assets/fonts/portal/fonts.css">
 <style>
 /* Stage 2 · Irrational Choice. Same white minimal shell as Stage 1 (face.html C);
    the challenge itself borrows the reCAPTCHA image-grid card: blue prompt band, tiles, icon toolbar. */
@@ -136,6 +135,9 @@ body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit
 .dev .ttl{font-weight:600;font-size:12px;margin-bottom:4px;padding-right:20px}
 @media (max-width:760px){.dev{left:12px;right:12px;width:auto}}
 @media (prefers-reduced-motion:reduce){.tile,.card,.tile .tick,.tile .art{transition:none!important;animation:none!important}}
+html:lang(zh-CN){--font-body:Inter,PortalSans,"PingFang SC",sans-serif}
+html:lang(zh-CN) .band h2{font:400 24px/1.25 PortalPixel,"PingFang SC",sans-serif;letter-spacing:0}
+html:lang(zh-CN) .band h2 mark{font-weight:400}
 </style>
 <script src="i18n/messages.js"></script>
 <script src="i18n.js"></script>

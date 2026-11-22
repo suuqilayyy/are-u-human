@@ -5,6 +5,7 @@
 <link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title data-i18n="forum.title">Neverland Forum · Neverland - Navigator</title>
+<link rel="stylesheet" href="assets/fonts/portal/fonts.css">
 <style>
 :root{
   --win:#c0c0c0; --win-hi:#ffffff; --win-lo:#808080; --win-dk:#000000;
@@ -125,12 +126,13 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
   .hero{gap:4px}
   .hero .hand{width:clamp(28px,9vw,48px)}
   .hero h1{min-width:0;text-wrap:balance}
-  :lang(zh-CN) .hero h1{font-size:clamp(28px,8vw,40px)}
 
 }
 @media (prefers-reduced-motion:reduce){
   .marquee span,.blink,.heart{animation:none}
 }
+html:lang(zh-CN) .sky,html:lang(zh-CN) .sky .nav td,html:lang(zh-CN) .board,html:lang(zh-CN) .welcome .bd{font-family:"Times New Roman",PortalSong,"Songti SC",serif}
+html:lang(zh-CN) .welcome button{font-family:Inter,PortalSans,"PingFang SC",sans-serif}
 </style>
 <style>
 .board{width:92%;margin:14px auto;border-collapse:collapse;background:#fffff0;font-family:"Times New Roman",serif;font-size:15px;border:2px outset #ccc}
@@ -170,7 +172,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
 <div id="crt">
 <div class="window out">
-  <div class="titlebar"><span class="ico">N</span><span class="t" data-i18n="retro.neverland_navigator">Neverland - Navigator</span>
+  <div class="titlebar"><span class="ico">N</span><span class="t" lang="en" data-i18n="retro.neverland_navigator">Neverland - Navigator</span>
     <span class="btns"><span class="out">_</span><span class="out">□</span><span class="out">×</span></span></div>
 
   <div class="menubar"><span data-i18n-html="menu.file"><u>F</u>ile</span><span data-i18n-html="menu.edit"><u>E</u>dit</span><span data-i18n-html="menu.view"><u>V</u>iew</span><span data-i18n-html="menu.go"><u>G</u>o</span><span data-i18n-html="menu.communicator"><u>C</u>ommunicator</span><span data-i18n-html="menu.help"><u>H</u>elp</span></div>
@@ -209,7 +211,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
       <div class="hero">
         <img class="hand" src="assets/img/wave-rings.gif" alt="">
-        <h1 data-i18n="retro.welcome_to_neverland">Welcome to Neverland</h1>
+        <h1 lang="en" data-i18n="retro.welcome_to_neverland">Welcome to Neverland</h1>
         <img class="hand" src="assets/img/wave.gif" alt="">
       </div>
 
@@ -234,7 +236,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
       <div class="foot">
         <span data-i18n="retro.visitor">You are visitor No.</span> <span class="counter" id="counter"></span><br>
         <span data-i18n="retro.footer">Best viewed with Navigator 4.0 at 800x600 · Last updated 11/22/2040</span><br>
-        <div class="badges" aria-hidden="true">
+        <div class="badges" lang="en" aria-hidden="true">
           <span class="badge" style="background:#ffff00" data-i18n-html="retro.100_human_br_made">100% HUMAN<br>MADE</span>
           <span class="badge" style="background:#000;color:#39ff14" data-i18n-html="retro.no_agents_br_allowed">NO AGENTS<br>ALLOWED</span>
           <span class="badge" style="background:#ff99cc" data-i18n-html="retro.sign_my_br_guestbook">Sign my<br>GUESTBOOK</span>
@@ -254,7 +256,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
 <div class="taskbar">
   <div class="start out"><i>🪟</i><span data-i18n="retro.start">Start</span></div>
-  <div class="task in"><span>🌐</span><span data-i18n="retro.neverland_navigator">Neverland - Navigator</span></div>
+  <div class="task in"><span>🌐</span><span lang="en" data-i18n="retro.neverland_navigator">Neverland - Navigator</span></div>
   <div class="tray in"><span>🔈</span><span id="clock">00:37</span></div>
 </div>
 </div>
@@ -355,7 +357,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 })();
 </script>
 <div class="cam" aria-label="Your camera" data-i18n-aria-label="forum.yourCamera"><video id="cv" playsinline muted autoplay></video><div class="s"><i></i><span data-i18n="forum.live">Presence check · live</span></div></div>
-<div class="welcome" id="welcome" role="dialog" aria-labelledby="wt"><div class="win out"><div class="titlebar"><span class="t">Neverland</span></div><div class="bd"><h2 id="wt" data-i18n="forum.wTitle">WELCOME!</h2><div id="wbody"></div><div class="share" data-i18n="forum.wShare"></div><div class="sorry" data-i18n="forum.wSorry"></div></div></div></div>
+<div class="welcome" id="welcome" role="dialog" aria-labelledby="wt"><div class="win out"><div class="titlebar"><span class="t">Neverland</span></div><div class="bd"><h2 id="wt" lang="en" data-i18n="forum.wTitle">WELCOME!</h2><div id="wbody"></div><div class="share" data-i18n="forum.wShare"></div><div class="sorry" data-i18n="forum.wSorry"></div></div></div></div>
 <div class="dlg" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dt">
   <div class="win"><div class="tt" id="dt" data-i18n="forum.declaration">No-AI Content Declaration</div>
     <div class="tx" id="terms"><span data-i18n="forum.terms">PLACEHOLDER. By posting on Neverland you declare that every word of this reply was typed by your own hand, that no agent, assistant, autocomplete or language model was consulted, suggested, or present in the room...</span><br><br><span id="sections"></span><br><br><span data-i18n="forum.end">End of declaration.</span></div>

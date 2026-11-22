@@ -5,9 +5,8 @@
 <link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title data-i18n="face.title">Human Verification Portal · Face</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="assets/fonts/portal/fonts.css">
 <style>
 :root{--ink:#121316;--sub:#5d6270;--tick:#c9ccd3;--on:#2fae4b;--bad:#e0483e}
 *{box-sizing:border-box}
@@ -155,6 +154,8 @@ body{background:#fff}
 .gate button:disabled{background:var(--gray-200);color:var(--gray-500);cursor:default}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px)}}
 @media (prefers-reduced-motion:reduce){.gate{animation:none;transition:none}}
+html:lang(zh-CN){--font-body:Inter,PortalSans,"PingFang SC",sans-serif}
+html:lang(zh-CN) .gate .local{font:400 24px/1.1 PortalPixel,"PingFang SC",sans-serif;letter-spacing:0;text-wrap:balance}
 </style>
 <script src="i18n/messages.js"></script>
 <script src="i18n.js"></script>
