@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Human Verification Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -10,18 +10,42 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased}
-.phone{width:min(420px,100%);min-height:100dvh;margin:0 auto;display:flex;flex-direction:column;align-items:center;padding:var(--s-6) var(--s-5) var(--s-6)}
-.head{margin-top:auto;text-align:center}
-.logo{display:block;margin:0 auto var(--s-5);height:clamp(170px,28dvh,230px);width:auto}
+body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100dvh}
+.phone{flex:1;width:min(420px,100%);margin:0 auto;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:var(--s-6) var(--s-5)}
+.head{text-align:left}
+.logo{display:block;margin:0 0 var(--s-5) -8px;height:clamp(170px,28dvh,230px);width:auto}
 /* dot-matrix title: her choice on 11-22, not code type */
 h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-display);letter-spacing:.01em;line-height:var(--lh-tight);color:var(--accent);margin:0 0 var(--s-5)} /* taste-skill-ignore */
-.lead{font-size:var(--fs-lead);line-height:1.35;color:var(--text);margin:0 0 var(--s-2);text-wrap:balance}
-.meta{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-sub);margin:0;text-wrap:pretty}
-.go{margin-top:auto}
+.lead{font-size:var(--fs-lead);line-height:1.35;color:var(--text);margin:0;text-wrap:pretty}
+
+/* full-bleed bar at the bottom: the whole strip is the button */
+.bar{display:block;width:100%;border:0;margin:0;padding:var(--s-5) var(--s-5) calc(var(--s-5) + env(safe-area-inset-bottom));background:var(--accent);color:var(--white);text-align:left;cursor:pointer;font-family:var(--font-body);transition:background var(--dur-fast)}
+.bar:hover{background:var(--accent-hover)}
+.bar:focus-visible{outline:3px solid var(--brand-200);outline-offset:-6px}
+.bar .in{width:min(420px,100%);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:var(--s-4)}
+.bar small{display:block;font-size:var(--fs-small);color:var(--brand-200);margin-bottom:var(--s-1)}
+.bar b{display:block;font-size:var(--fs-lead);font-weight:500}
+.bar svg{flex:none;transition:transform var(--dur) var(--ease-out)}
+.bar:hover svg{transform:translateX(4px)}
+
+/* checkbox challenge that drops in over the page */
+.scrim{position:fixed;inset:0;display:grid;place-items:center;padding:var(--s-4);background:rgba(255,255,255,.7);opacity:0;pointer-events:none;transition:opacity var(--dur) ease-out;z-index:5}
+.scrim.on{opacity:1;pointer-events:auto}
+.cap{width:min(320px,100%);display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4);background:var(--white);border:1px solid var(--gray-300);border-radius:var(--r-sm);box-shadow:0 12px 40px rgba(16,38,47,.14);
+  transform:translateY(-12px) scale(.97);opacity:0;transition:transform .4s var(--ease-out),opacity .25s ease-out}
+.scrim.on .cap{transform:none;opacity:1}
+.cap .box{flex:none;width:28px;height:28px;border:2px solid var(--gray-500);border-radius:4px;background:var(--white);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s,border-color .15s}
+.cap .box:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cap .box svg{opacity:0;transform:scale(.4);transition:opacity .12s,transform .25s cubic-bezier(.3,1.6,.5,1)}
+.cap.ok .box{background:var(--pass);border-color:var(--pass)}
+.cap.ok .box svg{opacity:1;transform:none}
+.cap label{flex:1;font-size:var(--fs-body);cursor:pointer}
+.cap .brand{display:flex;flex-direction:column;align-items:center;font-size:10px;line-height:1.3;color:var(--text-sub)}
+.cap .brand img{height:28px}
+
 .stag{opacity:0;transform:translateY(6px);animation:in var(--dur-slow) var(--ease-out) forwards}
 @keyframes in{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.stag{animation:none;opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.stag{animation:none;opacity:1;transform:none}.cap,.scrim{transition:none!important}}
 </style>
 </head>
 <body>
@@ -30,10 +54,35 @@ h1{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(-
     <img class="logo stag" src="assets/img/logo.png" alt="Human Verification Portal logo">
     <h1 class="stag" style="animation-delay:.06s">Human<br>Verification<br>Portal</h1>
     <p class="lead stag" style="animation-delay:.14s">We need to make sure you're human.</p>
-    <p class="meta stag" style="animation-delay:.2s">Neverland is for humans only.</p>
   </div>
-  <button class="btn btn-primary go stag" style="animation-delay:.35s" type="button" onclick="location.href='face.html'">Start verification</button>
 </main>
+<button class="bar stag" style="animation-delay:.3s" type="button" id="start">
+  <span class="in"><span><small>Neverland is for humans only.</small><b>Start verification</b></span>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+</button>
+
+<div class="scrim" id="scrim" aria-hidden="true">
+  <div class="cap" id="cap" role="group" aria-label="Human check">
+    <button class="box" id="box" type="button" aria-labelledby="capl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+    <label id="capl" for="box">Verify you are human</label>
+    <div class="brand"><img src="assets/img/logo.png" alt="">HVP</div>
+  </div>
+</div>
+
 <script src="flow.js"></script>
+<script src="bloom.js"></script>
+<script>
+const $=id=>document.getElementById(id),wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('start').onclick=()=>{$('scrim').classList.add('on');$('scrim').setAttribute('aria-hidden','false');setTimeout(()=>$('box').focus(),300);};
+let done=false;
+$('box').onclick=async()=>{if(done)return;done=true;
+  $('cap').classList.add('ok');            // passes the instant you click
+  await wait(420);
+  const from=$('box').getBoundingClientRect();
+  $('scrim').classList.remove('on');
+  await Bloom.play({from:{x:from.left+from.width/2,y:from.top+from.height/2},color:'pass',text:'#fff',hold:450});
+  location.href='face.html';
+};
+</script>
 </body>
 </html>

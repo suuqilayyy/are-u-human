@@ -35,6 +35,7 @@
   --danger:#cb3e34;     /* logo bracket */
   --danger-soft:#fbe9e7;
   --success:#2e7d4f;
+  --pass:#2fb35d;      /* full-page pass wipe + checkbox, 11-22 */
 
   /* type */
   --font-display:Doto,ui-monospace,monospace;

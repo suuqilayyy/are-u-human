@@ -70,6 +70,9 @@ h2{font-size:var(--fs-small);font-weight:600;color:var(--text-sub);margin:var(--
 .styles small{display:block;font-size:12px;color:var(--text-sub);margin-bottom:var(--s-2)}
 .srow{display:flex;gap:var(--s-5);flex-wrap:wrap}
 .srow img{width:56px;height:56px}
+.brow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s-3)}
+.bnote{font-size:var(--fs-small);color:var(--text-sub);margin:0 0 var(--s-4);line-height:1.5}
+.bnote code{font-size:13px;color:var(--text)}
 @media (max-width:600px){.ramp{grid-template-columns:repeat(5,1fr)}.type div{grid-template-columns:1fr}}
 </style>
 </head>
@@ -120,6 +123,19 @@ h2{font-size:var(--fs-small);font-weight:600;color:var(--text-sub);margin:var(--
   </div>
 </div>
 
+<h2>Bloom · bloom.js</h2>
+<p class="bnote">A color grows from a point to fill the page, holds, fades. <code>Bloom.play({from, color, hold, layer})</code> — <code>from</code>: an element, {x,y} or 'random'; <code>color</code>: pass, fail, brand, ink or any CSS color. Text that would be hard to read flips to white or ink as the edge reaches it.</p>
+<div class="brow">
+  <button class="btn btn-secondary" type="button" data-c="pass" data-f="me">Pass · from this button</button>
+  <button class="btn btn-secondary" type="button" data-c="pass">Pass · random</button>
+  <button class="btn btn-secondary" type="button" data-c="fail">Fail · random</button>
+  <button class="btn btn-secondary" type="button" data-c="brand">Brand · random</button>
+  <button class="btn btn-secondary" type="button" data-c="pass" data-t="#fff">Pass · text forced white</button>
+  <button class="btn btn-secondary" type="button" data-c="ink">Ink · random</button>
+  <button class="btn btn-secondary" type="button" data-c="#ffe14d">Custom yellow · random</button>
+  <button class="btn btn-secondary" type="button" data-c="ink" data-l="over">Ink · over everything</button>
+</div>
+
 <h2>Spacing (4pt)</h2>
 <div class="sp" id="sp"></div>
 
@@ -131,6 +147,7 @@ h2{font-size:var(--fs-small);font-weight:600;color:var(--text-sub);margin:var(--
   <div><div style="border-radius:var(--r-pill)"></div><small>pill</small></div>
 </div>
 </main>
+<script src="bloom.js"></script>
 <script>
 const cs=getComputedStyle(document.documentElement),v=n=>cs.getPropertyValue(n).trim();
 document.getElementById('ramp').innerHTML=[50,100,200,300,400,500,600,700,800,900].map(k=>
@@ -141,6 +158,7 @@ document.getElementById('sp').innerHTML=[1,2,3,4,5,6,7,8].map(i=>`<div><div styl
 const SN=['check-circle','lock','human','agent','scan-face','warning'];
 const fill=(id,dir)=>document.getElementById(id).innerHTML=SN.map(n=>`<img src="assets/svg/${dir}${n}.svg" alt="${n}">`).join('');
 fill('sl','');fill('sa','extruded/');fill('sb','dot/');
+document.querySelectorAll('.brow button').forEach(b=>b.onclick=()=>Bloom.play({from:b.dataset.f?b:'random',color:b.dataset.c,layer:b.dataset.l,text:b.dataset.t||'auto'}));
 const IC=['check','check-circle','x-circle','shield-check','lock','reticle','scan-face','camera','eye','mic','fingerprint','human','agent','warning','info','clock','refresh','audio','spinner'];
 document.getElementById('icons').innerHTML=IC.map(n=>`<a href="assets/svg/${n}.svg"><img ${n==='reticle'?'class="red"':''} src="assets/svg/${n}.svg" alt="">${n}</a>`).join('');
 const cap=document.getElementById('cap');cap.querySelector('button').onclick=()=>{if(cap.dataset.s!=='idle'){cap.dataset.s='idle';return;}cap.dataset.s='spin';setTimeout(()=>cap.dataset.s='ok',1400);};

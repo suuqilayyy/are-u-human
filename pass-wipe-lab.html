@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pass Wipe Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--gray-100);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased}
+header{max-width:1200px;margin:0 auto;padding:var(--s-6) var(--s-4) var(--s-4);display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap}
+header h1{font-size:20px;font-weight:600;margin:0}
+header p{margin:4px 0 0;font-size:var(--fs-small);color:var(--text-sub)}
+.all{height:40px;padding:0 var(--s-5);border:0;border-radius:var(--r-pill);background:var(--ink);color:#fff;font:500 15px var(--font-body);cursor:pointer}
+.grid{max-width:1200px;margin:0 auto;padding:0 var(--s-4) var(--s-8);display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:var(--s-6) var(--s-5)}
+.cell h2{font-size:15px;font-weight:600;margin:0 0 2px}
+.cell p{font-size:13px;color:var(--text-sub);margin:0 0 var(--s-3);min-height:34px;line-height:1.35}
+.cell button.play{margin-top:var(--s-3);height:36px;padding:0 var(--s-4);border:1px solid var(--gray-300);border-radius:var(--r-pill);background:#fff;font:500 14px var(--font-body);cursor:pointer}
+
+/* mini start page */
+.ph{position:relative;width:270px;height:560px;border-radius:30px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--gray-200),0 10px 30px rgba(16,38,47,.08);isolation:isolate}
+.ph .bg{position:absolute;inset:0;background:var(--pass);z-index:0;clip-path:inset(0 0 100% 0)}
+.ph .ct{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;transition:color .3s}
+.ph .hd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 22px}
+.ph img.lg{height:120px;width:auto;align-self:flex-start;margin:0 0 14px -5px}
+.ph .tt{font-family:var(--font-display);font-weight:800;font-size:30px;line-height:1.06;color:var(--accent);margin-bottom:14px;transition:color .3s}
+.ph .ld{font-size:15px;line-height:1.35}
+.ph .br{background:var(--accent);color:#fff;padding:14px 22px 18px}
+.ph .br small{display:block;font-size:11px;color:var(--brand-200)}
+.ph .br b{font-size:15px;font-weight:500}
+.ph.green .ct{color:#fff}.ph.green .tt{color:#fff}
+.ph .sc{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:rgba(255,255,255,.7);opacity:0;pointer-events:none;transition:opacity .25s}
+.ph .sc.on{opacity:1}
+.ph .cap{width:224px;display:flex;align-items:center;gap:10px;padding:12px;background:#fff;border:1px solid var(--gray-300);border-radius:8px;box-shadow:0 10px 30px rgba(16,38,47,.14);font-size:14px}
+.ph .bx{width:24px;height:24px;border:2px solid var(--gray-500);border-radius:4px;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.ph .bx svg{opacity:0;transform:scale(.4);transition:opacity .12s,transform .25s cubic-bezier(.3,1.6,.5,1)}
+.ph .ok .bx{background:var(--pass);border-color:var(--pass)}.ph .ok .bx svg{opacity:1;transform:none}
+.ph .cap img{height:22px;margin-left:auto}
+.ph .cur{position:absolute;inset:0;z-index:4;background:var(--pass);transform:translateY(-100%)}
+.ph .band{position:absolute;left:0;right:0;top:0;height:200%;z-index:0;transform:translateY(-100%);
+  background:linear-gradient(to bottom,var(--pass) 0,var(--pass) 44%,#8de0a8 49.5%,rgba(47,179,93,0) 50%)}
+.ph .line{position:absolute;left:0;right:0;top:0;height:3px;z-index:2;background:#d8ffe4;box-shadow:0 0 18px 6px rgba(120,255,160,.7);opacity:0}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Pass wipe · 6 versions</h1><p>Each one: checkbox drops in, ticks instantly, then the green. Click a phone or its button to replay.</p></div>
+  <button class="all" type="button" id="all">Play all</button>
+</header>
+<div class="grid" id="grid"></div>
+
+<template id="tpl">
+  <div class="ph">
+    <div class="bg"></div>
+    <div class="ct">
+      <div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human<br>Verification<br>Portal</div><div class="ld">We need to make sure you're human.</div></div>
+      <div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div>
+    </div>
+    <div class="sc"><div class="cap"><div class="bx"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>Verify you are human<img src="assets/img/logo.png" alt=""></div></div>
+  </div>
+</template>
+
+<script>
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const IO='cubic-bezier(.7,0,.2,1)',OUT='cubic-bezier(.05,.7,.1,1)';
+const anim=(el,kf,o)=>el.animate(kf,{fill:'forwards',...o}).finished;
+const hidden='inset(0 0 100% 0)',full='inset(0 0 0 0)',gone='inset(100% 0 0 0)';
+
+const V=[
+ {k:'A',t:'Curtain over everything',d:'Solid green drops over the page and the box, then pulls back up to white. (Current.)',
+  async run(p){const c=document.createElement('div');c.className='cur';p.appendChild(c);
+    await anim(c,[{transform:'translateY(-100%)'},{transform:'none'}],{duration:500,easing:IO});
+    p.querySelector('.sc').classList.remove('on');await wait(300);
+    await anim(c,[{transform:'none'},{transform:'translateY(-100%)'}],{duration:500,easing:IO});c.remove();}},
+ {k:'B',t:'Background floods, then fades',d:'Only the page background turns green, top to bottom. Text flips to white. Green fades out.',
+  async run(p,bg){p.querySelector('.sc').classList.remove('on');setTimeout(()=>p.classList.add('green'),220);
+    await anim(bg,[{clipPath:hidden},{clipPath:full}],{duration:600,easing:IO});await wait(500);
+    p.classList.remove('green');await anim(bg,[{opacity:1},{opacity:0}],{duration:450,easing:'ease-out'});}},
+ {k:'C',t:'Background floods, then rolls back up',d:'Same flood, then the green edge retreats upward the way it came.',
+  async run(p,bg){p.querySelector('.sc').classList.remove('on');setTimeout(()=>p.classList.add('green'),220);
+    await anim(bg,[{clipPath:hidden},{clipPath:full}],{duration:600,easing:IO});await wait(450);
+    setTimeout(()=>p.classList.remove('green'),250);await anim(bg,[{clipPath:full},{clipPath:hidden}],{duration:550,easing:IO});}},
+ {k:'D',t:'Passes straight through',d:'Green enters from the top and keeps going, leaving through the bottom. Feels like a scan.',
+  async run(p,bg){p.querySelector('.sc').classList.remove('on');setTimeout(()=>p.classList.add('green'),200);setTimeout(()=>p.classList.remove('green'),1050);
+    await anim(bg,[{clipPath:hidden,offset:0},{clipPath:full,offset:.45},{clipPath:full,offset:.6},{clipPath:gone,offset:1}],{duration:1300,easing:'cubic-bezier(.6,0,.3,1)'});}},
+ {k:'E',t:'Grows out of the checkbox',d:'A circle of green blooms from the tick until it fills the page, then fades.',
+  async run(p,bg){const b=p.querySelector('.bx').getBoundingClientRect(),r=p.getBoundingClientRect(),x=b.left-r.left+12,y=b.top-r.top+12;
+    p.querySelector('.sc').classList.remove('on');setTimeout(()=>p.classList.add('green'),250);
+    await anim(bg,[{clipPath:`circle(0px at ${x}px ${y}px)`},{clipPath:`circle(700px at ${x}px ${y}px)`}],{duration:700,easing:'cubic-bezier(.5,0,.2,1)'});await wait(400);
+    p.classList.remove('green');await anim(bg,[{opacity:1},{opacity:0}],{duration:450,easing:'ease-out'});}},
+ {k:'F',t:'Soft edge with a scan line',d:'A glowing line leads a feathered green wash down the page, then everything settles back to white.',
+  async run(p){const band=document.createElement('div');band.className='band';const ln=document.createElement('div');ln.className='line';p.prepend(band);p.appendChild(ln);
+    p.querySelector('.sc').classList.remove('on');setTimeout(()=>p.classList.add('green'),350);
+    ln.animate([{opacity:1,transform:'translateY(0)'},{opacity:1,transform:'translateY(560px)',offset:.95},{opacity:0,transform:'translateY(560px)'}],{duration:800,easing:'cubic-bezier(.45,0,.25,1)',fill:'forwards'});
+    await anim(band,[{transform:'translateY(-100%)'},{transform:'translateY(0)'}],{duration:800,easing:'cubic-bezier(.45,0,.25,1)'});
+    await wait(350);p.classList.remove('green');await anim(band,[{opacity:1},{opacity:0}],{duration:500,easing:'ease-out'});band.remove();ln.remove();}},
+];
+
+const grid=document.getElementById('grid'),tpl=document.getElementById('tpl');
+const cells=V.map(v=>{
+  const c=document.createElement('div');c.className='cell';
+  c.innerHTML=`<h2>${v.k} · ${v.t}</h2><p>${v.d}</p>`;
+  const ph=tpl.content.firstElementChild.cloneNode(true);c.appendChild(ph);
+  const b=document.createElement('button');b.className='play';b.type='button';b.textContent='Replay '+v.k;c.appendChild(b);
+  grid.appendChild(c);
+  let busy=false;
+  const play=async()=>{if(busy)return;busy=true;
+    const bg=ph.querySelector('.bg'),sc=ph.querySelector('.sc'),cap=ph.querySelector('.cap');
+    bg.getAnimations().forEach(a=>a.cancel());ph.classList.remove('green');cap.classList.remove('ok');
+    sc.classList.add('on');await wait(650);cap.classList.add('ok');await wait(420);
+    await v.run(ph,bg);await wait(150);
+    bg.getAnimations().forEach(a=>a.cancel());cap.classList.remove('ok');busy=false;};
+  ph.onclick=play;b.onclick=play;return play;});
+document.getElementById('all').onclick=()=>cells.forEach(p=>p());
+</script>
+</body>
+</html>

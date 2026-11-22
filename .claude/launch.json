@@ -1,1 +1,1 @@
-{"version":"0.0.1","configurations":[{"name":"are-u-human","runtimeExecutable":"python3","runtimeArgs":["-m","http.server","8731"],"port":8731}]}
+{"version":"0.0.1","configurations":[{"name":"are-u-human","runtimeExecutable":"python3","runtimeArgs":["-c","import http.server as h\nclass H(h.SimpleHTTPRequestHandler):\n  def end_headers(s):\n    s.send_header('Cache-Control','no-store');super().end_headers()\nh.ThreadingHTTPServer(('',8731),H).serve_forever()"],"port":8731}]}

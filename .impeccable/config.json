@@ -35,6 +35,24 @@
         "value": "inter",
         "createdAt": "2026-11-22T01:06:26.634Z",
         "reason": "Claude judgement: Stage 1 deliberately imitates a standard Google/Cloudflare-style verification portal (user asked for 'standard' system); neutral body face is the point, Doto carries personality"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "pass-wipe-lab.html"
+        ],
+        "createdAt": "2026-11-22T01:29:18.601Z",
+        "reason": "Claude judgement: glow is the scan line in prototype F of a motion comparison lab the user asked for, literal scanning motion"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "pass-wipe-lab.html"
+        ],
+        "createdAt": "2026-11-22T01:29:51.310Z",
+        "reason": "Claude judgement: outer box is a phone-frame mock in a motion comparison lab; the inner card is the checkbox widget being prototyped, not a UI hierarchy"
       }
     ]
   }
