@@ -150,6 +150,8 @@ body{background:#fff}
 .gate .gicon{margin-bottom:12px}
 .gate .err:empty{display:none}
 .gate.out{opacity:0;transform:translateY(16px)}
+.gate .local{margin:18px 0 18px;padding:12px 0 0;border-top:1px solid var(--line);font:900 22px/1.1 var(--font-display);letter-spacing:.01em;color:var(--danger)}
+.gate button:disabled{background:var(--gray-200);color:var(--gray-500);cursor:default}
 @keyframes gateIn{from{opacity:0;transform:translateY(24px)}}
 @media (prefers-reduced-motion:reduce){.gate{animation:none;transition:none}}
 </style>
@@ -186,6 +188,8 @@ body{background:#fff}
   <img class="gicon" src="assets/svg/scan-face.svg" alt="" width="48" height="48">
   <h1 id="gt">Face Verification</h1>
   <p>Put your face inside the circle.</p>
+  <p class="local">ALL DATA IS PROCESSED LOCALLY.</p>
+  <button type="button" id="ok" disabled>OK (3)</button>
   <div class="err" id="err"></div>
 </div></div>
 
@@ -223,6 +227,9 @@ let face=null,obj=null,ready=false,lastFr=null,objs=[];
   await v.play();go('lock');requestAnimationFrame(loop);
 }catch(e){$('err').textContent='Camera is blocked. Allow it in the address bar, then reload.';}})();
 
+// the notice card: OK unlocks after a 3s countdown (11-22)
+(async()=>{const b=$('ok');for(let n=3;n>0;n--){b.textContent=`OK (${n})`;await new Promise(r=>setTimeout(r,1000));}b.textContent='OK';b.disabled=false;b.focus();
+  b.onclick=()=>{if($('err').textContent)return;const g=$('gate');g.classList.add('out');setTimeout(()=>g.remove(),400);};})();
 // ---- drawing inside the lens ----
 function sizeCanvas(){const r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;}
 addEventListener('resize',sizeCanvas);
@@ -326,7 +333,7 @@ async function stage1(run){
 const STEPS={
   lock:{enter(){stage1Run++;tries=0;hud=false;axis(null);progress(0);$('line').textContent='';sayA('Position your face in the frame.','',true);},
     tick(f){if(!f.pts){mem.ok=0;return;}
-      const g=$('gate');if(g&&!g.classList.contains('out')){g.classList.add('out');setTimeout(()=>g.remove(),400);}
+      if($('gate'))return;
       if(f.size<.32){if(mem.hint!=='far'){mem.hint='far';sayA('Move closer.','',true);}mem.ok=0;return;}
       if(f.off>.22){if(mem.hint!=='off'){mem.hint='off';sayA('Center your face in the frame.','',true);}mem.ok=0;return;}
       mem.ok=(mem.ok||0)+1;if(mem.ok>18)go('circle');}},
