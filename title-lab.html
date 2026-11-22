@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Title Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght@500;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--gray-100);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased}
+header{max-width:1240px;margin:0 auto;padding:var(--s-6) var(--s-4) var(--s-4)}
+header h1{font-size:20px;font-weight:600;margin:0}
+header p{margin:4px 0 0;font-size:var(--fs-small);color:var(--text-sub)}
+.grid{max-width:1240px;margin:0 auto;padding:0 var(--s-4) var(--s-8);display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:var(--s-6) var(--s-5)}
+.cell h2{font-size:15px;font-weight:600;margin:0 0 2px}
+.cell p.d{font-size:13px;color:var(--text-sub);margin:0 0 var(--s-3);min-height:34px;line-height:1.35}
+
+.ph{position:relative;width:290px;height:600px;border-radius:30px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--gray-200),0 10px 30px rgba(16,38,47,.08);display:flex;flex-direction:column}
+.hd{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 22px}
+.lg{height:130px;width:auto;align-self:flex-start;margin:0 0 16px -5px}
+.tt{font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.06;color:var(--accent);margin:0 0 16px}
+.ld{font-size:17px;line-height:1.35;margin:0}
+.br{background:var(--accent);color:#fff;padding:16px 22px 20px}
+.br small{display:block;font-size:11px;color:var(--brand-200)}
+.br b{font-size:16px;font-weight:500}
+
+/* A · heavier */
+.A .tt{font-weight:900;font-size:36px;color:var(--brand-700)}
+.A .ld{font-weight:600;font-size:19px;letter-spacing:-.01em}
+
+/* B · red block cursor at the end, like a terminal waiting for you */
+.blk{display:inline-block;width:.5em;height:.82em;background:var(--danger);vertical-align:-.04em;margin-left:.08em;animation:blink 1.05s steps(1) infinite}
+.ld .blk{width:.45em;height:.9em;vertical-align:-.12em;animation:none}
+@keyframes blink{50%{opacity:0}}
+
+/* C · emoji as glyphs */
+.C .tt .em{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:.82em;vertical-align:.02em}
+.C .ld .em{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;margin-right:.25em}
+
+/* D · logo's red tracking brackets around one word */
+.rt{position:relative;display:inline-block;padding:0 .14em;margin:0 -.04em}
+.rt::before,.rt::after{content:"";position:absolute;width:.32em;height:.32em;border:2px solid var(--danger)}
+.rt::before{left:0;top:-.04em;border-right:0;border-bottom:0}
+.rt::after{right:0;bottom:-.02em;border-left:0;border-top:0}
+.rt i{position:absolute;inset:0;font-style:normal;pointer-events:none}
+.rt i::before,.rt i::after{content:"";position:absolute;width:.32em;height:.32em;border:2px solid var(--danger)}
+.rt i::before{right:0;top:-.04em;border-left:0;border-bottom:0}
+.rt i::after{left:0;bottom:-.02em;border-right:0;border-top:0}
+
+/* E · red tape on the key word */
+.tape{background:var(--danger);color:#fff;padding:0 .18em;margin:0 -.04em}
+.E .tt .tape{padding:0 .1em}
+
+/* F · bold + red square bullet + highlighted word */
+.F .tt{font-weight:900;color:var(--ink)}
+.F .tt .acc{color:var(--accent)}
+.F .ld{font-weight:500}
+.F .ld u{text-decoration:none;box-shadow:inset 0 -.38em 0 rgba(203,62,52,.22)}
+.sq{display:inline-block;width:.42em;height:.42em;background:var(--danger);margin-left:.12em;vertical-align:.02em}
+/* G · chosen: E's taped HUMAN + F + spellcheck squiggle */
+.G .tt{font-weight:900;color:var(--ink)}
+.G .tt .tape{padding:0 .1em;margin-left:-.1em}
+.typo{text-decoration:underline wavy var(--danger);text-decoration-thickness:1.5px;text-underline-offset:.22em;text-decoration-skip-ink:none}
+</style>
+</head>
+<body>
+<header><h1>Title + lead · 7 versions</h1><p>Same page, only the title and the line under it change.</p></header>
+<div class="grid">
+
+<div class="cell"><h2>0 · Current</h2><p class="d">For reference.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human<br>Verification<br>Portal</div><p class="ld">We need to make sure you're human.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell A"><h2>A · Heavier</h2><p class="d">Doto at 900 in a darker blue; the lead in semibold, a size up.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human<br>Verification<br>Portal</div><p class="ld">We need to make sure you're human.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell B"><h2>B · Red block at the end</h2><p class="d">A blinking red cursor after the title, a still one after the lead. The system is waiting for you.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human<br>Verification<br>Portal<span class="blk"></span></div><p class="ld">We need to make sure you're human<span class="blk"></span></p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell C"><h2>C · Emoji in the line</h2><p class="d">Emoji stand in front, as icons: an eye on the title, a hand on the lead.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human <span class="em">👁️</span><br>Verification<br>Portal</div><p class="ld"><span class="em">🫵</span>We need to make sure you're human.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell D"><h2>D · Tracked word</h2><p class="d">The logo's red face-tracking brackets lock onto "human" in the lead.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt">Human<br>Verification<br>Portal</div><p class="ld">We need to make sure you're <span class="rt">human<i></i></span>.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell E"><h2>E · Red tape</h2><p class="d">"Human" in the title and the lead sit on a solid red strip, like a warning label.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt"><span class="tape">Human</span><br>Verification<br>Portal</div><p class="ld">We need to make sure you're <span class="tape">human</span>.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell F"><h2>F · Bold ink + red square</h2><p class="d">Black heavy title with only "Human" in blue, a red square full stop, the key word marker-highlighted.</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt"><span class="acc">Human</span><br>Verification<br>Portal<span class="sq"></span></div><p class="ld">We need to make sure you're <u>human</u>.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+<div class="cell G"><h2>G · E + F, squiggle (chosen)</h2><p class="d">Taped uppercase HUMAN, heavy ink title, spellcheck squiggle under "human".</p>
+<div class="ph"><div class="hd"><img class="lg" src="assets/img/logo.png" alt=""><div class="tt"><span class="tape">HUMAN</span><br>Verification<br>Portal</div><p class="ld">We need to make sure you're <span class="typo">human</span>.</p></div><div class="br"><small>Neverland is for humans only.</small><b>Start verification →</b></div></div></div>
+
+</div>
+</body>
+</html>

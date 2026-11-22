@@ -1,0 +1,65 @@
+# Stage 2 候选图来源
+
+- **B9-frame-4.jpg** — 作者：gardnernewf；标题：Crooked Picture；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/79337515@N00/2414919869/)；摄影师原图已使用 Photoshop 纹理，本地另裁剪并缩放。
+- **B9-frame-3.jpg** — 作者：Peter Addor；标题：The Pink Wall；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/109715245@N06/49749114666/)；从 1018 × 1024 版本裁出 600 × 600，并放大至 800 × 800。
+- **B9-paste-4.jpg** — 作者：Slipp D. Thompson；标题：Toothpaste；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/92418454@N00/8260048643/)；已裁剪并缩放。
+- **B9-frame-2.jpg** — 作者：Brandon Morse；标题：caught in the act.；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/51035560498@N01/23814001/)；原图 600 × 800，已裁剪并放大至 800 × 800。
+- **B8-grey-4.jpg** — 作者：Alex Tyson；标题：An empty room with a wooden floor and a window；许可：[Unsplash License](https://unsplash.com/license)；[原图页面](https://unsplash.com/photos/an-empty-room-with-a-wooden-floor-and-a-window-LvvHxE8-FyY)；已裁剪并缩放。
+- **B9-box-4.jpg** — 作者：RDNE Stock project；标题：A Cardboard Box with a Hole；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/a-cardboard-box-with-a-hole-7363092/)；已裁剪并缩放。
+- **B9-frame-1.jpg** — 作者：1lenore；标题：Crooked picture?；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/80522246@N00/540006448/)；已裁剪并缩放。
+- **B9-paste-3.jpg** — 作者：Jens Rost；标题：Squeezed out toothpaste tube and brush；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://www.flickr.com/photos/56380734@N05/33203492312/)；已裁剪并缩放。
+
+所有本地图均从原图裁成正方形、缩放并另存 JPG；以下逐张保留来源与作者。Pixabay 素材许可禁止以基本不变的素材形式单独售卖或分发，请在最终作品中使用时注意其许可条件。
+
+- **B7-velvet-1.jpg** — 作者：Engin Akyurt；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/close-up-photo-of-black-textile-1487821/)；已裁剪并缩放。
+- **B7-velvet-2.jpg** — 作者：Diana ✨；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/soft-velvet-fabric-19856120/)；已裁剪并缩放。
+- **B7-velvet-3.jpg** — 作者：Olga Kovalski；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/purple-soft-velvet-20802768/)；已裁剪并缩放。
+- **B7-velvet-4.jpg** — 作者：Marina Leonova；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/glistening-dark-fabric-7717487/)；已裁剪并缩放。
+- **B7-sand-1.jpg** — 作者：rajivkumarprajapati123；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/sand-paper-macro-crisp-abrasive-4488844/)；已裁剪并缩放。
+- **B7-sand-2.jpg** — 作者：BRRT；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/sandpaper-close-up-texture-paper-654699/)；已裁剪并缩放。
+- **B7-sand-3.jpg** — 作者：BRRT；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/sandpaper-close-up-texture-paper-654698/)；已裁剪并缩放。
+- **B7-sand-4.jpg** — 作者：LeoNeoBoy；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/emery-cloth-sandpaper-a-carpenter-1827149/)；已裁剪并缩放。
+- **B7-metal-1.jpg** — 作者：Shawn Celavie；许可：[Unsplash License](https://unsplash.com/license)；[原图页面](https://unsplash.com/photos/close-up-of-brushed-metal-with-horizontal-lines-GRL_7pncaQ8)；已裁剪并缩放。
+- **B7-metal-2.jpg** — 作者：PellissierJP；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/background-texture-metal-scratches-1172581/)；已裁剪并缩放。
+- **B7-metal-3.jpg** — 作者：Brice Cooper；许可：[Unsplash License](https://unsplash.com/license)；[原图页面](https://unsplash.com/photos/a-close-up-of-a-shiny-metal-surface-IlHaUr0Dx0s)；已裁剪并缩放。
+- **B7-metal-4.jpg** — 作者：JacquesBarrette；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/texture-metal-metals-brushed-metal-3412537/)；已裁剪并缩放。
+- **B8-warm-1.jpg** — 作者：Melike Dağaç；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/sunlit-empty-room-with-arched-window-in-turkiye-29300979/)；已裁剪并缩放。
+- **B8-warm-2.jpg** — 作者：Yifan Lai；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/warm-sunlit-interior-of-abandoned-room-40636406/)；已裁剪并缩放。
+- **B8-warm-3.jpg** — 作者：Yusuf Çelik；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/light-from-windows-in-empty-room-21175828/)；已裁剪并缩放。
+- **B8-warm-4.jpg** — 作者：ddlogg；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/sunset-through-window-casting-glowing-shadows-32766954/)；已裁剪并缩放。
+- **B8-fluor-1.jpg** — 作者：Yusuf Çelik；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/lamp-and-white-wall-in-empty-room-18132318/)；已裁剪并缩放。
+- **B8-fluor-2.jpg** — 作者：Sebastian Sollfrank；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/empty-concrete-hall-illuminated-with-fluorescent-lamps-19736415/)；已裁剪并缩放。
+- **B8-fluor-3.jpg** — 作者：Valentin Ivantsov；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/spacious-modern-office-interior-with-glass-partitions-40325299/)；已裁剪并缩放。
+- **B8-fluor-4.jpg** — 作者：Brunxs；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/empty-dark-hall-with-lamps-6033463/)；已裁剪并缩放。
+- **B8-grey-1.jpg** — 作者：Stanislav Kondratiev；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/window-in-a-dark-room-11264117/)；已裁剪并缩放。
+- **B8-grey-2.jpg** — 作者：Jan Koetsier；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/window-with-broken-glass-2724373/)；已裁剪并缩放。
+- **B8-grey-3.jpg** — 作者：alleksana；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/city-view-from-a-window-4239736/)；已裁剪并缩放。
+- **B9-paste-1.jpg** — 作者：EME；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/tube-toothpaste-aluminum-red-empty-547403/)；已裁剪并缩放。
+- **B9-paste-2.jpg** — 作者：EME；许可：[Pixabay Content License](https://pixabay.com/service/license-summary/)；[原图页面](https://pixabay.com/photos/tube-toothpaste-aluminum-red-empty-547398/)；已裁剪并缩放。
+- **B9-box-1.jpg** — 作者：Tony Webster；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://commons.wikimedia.org/wiki/File:Damaged_FedEx_Box_-_Corner_Smashed_In_Cardboard_Shipping_Container_(53371562280).jpg)；已裁剪并缩放。
+- **B9-box-2.jpg** — 作者：Meanwell Packaging；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://commons.wikimedia.org/wiki/File:Damaged_fragile_parcel_delivered_to_doorstep.jpg)；已裁剪并缩放。
+- **B9-box-3.jpg** — 作者：Meanwell Packaging；许可：[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)；[原图页面](https://commons.wikimedia.org/wiki/File:Damaged_Cardboard_Box_Labelled_Fragile.jpg)；已裁剪并缩放。
+- **B10-storm-1.jpg** — 作者：Engin Akyurt；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/dramatic-overcast-sky-with-storm-clouds-37098587/)；已裁剪并缩放。
+- **B10-storm-2.jpg** — 作者：Gundula Vogel；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/dramatic-storm-clouds-in-a-moody-sky-37641625/)；已裁剪并缩放。
+- **B10-storm-3.jpg** — 作者：Francesco Ungaro；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/dramatic-sky-with-dark-storm-clouds-31106203/)；已裁剪并缩放。
+- **B10-storm-4.jpg** — 作者：Devyn Breslin；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/storm-clouds-in-sky-15149448/)；已裁剪并缩放。
+- **B10-thin-1.jpg** — 作者：Melike B；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/cirrus-clouds-on-blue-sky-9786508/)；已裁剪并缩放。
+- **B10-thin-2.jpg** — 作者：Jess Loiterton；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/photo-of-a-blue-sky-with-thin-clouds-6389394/)；已裁剪并缩放。
+- **B10-thin-3.jpg** — 作者：Diego Fraga；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/dramatic-blue-sky-with-cirrus-clouds-30309050/)；已裁剪并缩放。
+- **B10-thin-4.jpg** — 作者：Silali Banerjee；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/wispy-cirrus-clouds-in-bright-blue-sky-29260609/)；已裁剪并缩放。
+- **B10-pink-1.jpg** — 作者：Eleanor Gann；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/clouds-in-the-sky-12773115/)；已裁剪并缩放。
+- **B10-pink-2.jpg** — 作者：Erik Schereder；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/sky-at-sunset-with-pink-clouds-5819887/)；已裁剪并缩放。
+- **B10-pink-3.jpg** — 作者：Dapo Abideen；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/wonderful-pink-clouds-in-sky-at-sunset-5677459/)；已裁剪并缩放。
+- **B10-pink-4.jpg** — 作者：Dava Malepe；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/pink-clouds-in-the-sky-13536737/)；已裁剪并缩放。
+- **B11-c1-1.jpg** — 作者：Tom Jurman；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/lonely-chair-in-dimly-lit-room-with-window-32422108/)；已裁剪并缩放。
+- **B11-c1-2.jpg** — 作者：Lisa Fotios；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/abstract-photo-of-chair-in-the-room-4164320/)；已裁剪并缩放。
+- **B11-c1-3.jpg** — 作者：curtain inin；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/a-grayscale-photo-of-an-empty-chair-inside-the-room-10471482/)；已裁剪并缩放。
+- **B11-c1-4.jpg** — 作者：Ivan Xolod；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/chair-by-the-window-9002404/)；已裁剪并缩放。
+- **B11-c2-1.jpg** — 作者：Feyza Yıldırım；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/chair-near-sunlit-wall-in-room-16391244/)；已裁剪并缩放。
+- **B11-c2-2.jpg** — 作者：Brunxs；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/minimalist-black-wood-chair-in-empty-room-29331547/)；已裁剪并缩放。
+- **B11-c2-3.jpg** — 作者：Hazily Light；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/chair-in-empty-room-24837736/)；已裁剪并缩放。
+- **B11-c2-4.jpg** — 作者：Natia；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/an-empty-chair-near-the-curtain-9352107/)；已裁剪并缩放。
+- **B11-c3-1.jpg** — 作者：Fatma Zehra Kekeç；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/empty-chair-in-light-in-room-in-shadow-15154651/)；已裁剪并缩放。
+- **B11-c3-2.jpg** — 作者：David Scott；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/black-and-white-picture-of-a-chair-in-an-empty-room-in-sunlight-16013182/)；已裁剪并缩放。
+- **B11-c3-3.jpg** — 作者：Виктория Кивнюк；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/chair-in-an-empty-room-20027127/)；已裁剪并缩放。
+- **B11-c3-4.jpg** — 作者：Axel Sandoval；许可：[Pexels License](https://www.pexels.com/license/)；[原图页面](https://www.pexels.com/photo/empty-chair-with-door-and-windows-behind-16631162/)；已裁剪并缩放。

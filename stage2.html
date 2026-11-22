@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title data-i18n="stage2.title">Human Verification Portal | Intuition</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="assets/fonts/portal/fonts.css">
+<style>
+/* Stage 2 · Irrational Choice. Same white minimal shell as Stage 1 (face.html C);
+   the challenge itself borrows the reCAPTCHA image-grid card: blue prompt band, tiles, icon toolbar. */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased}
+.phone{min-height:100dvh;width:min(420px,100%);margin:0 auto;display:flex;flex-direction:column;padding:28px 16px 22px}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gray-500)}
+.top b{font-weight:500;color:var(--gray-700)}
+.stage{display:flex;gap:10px}
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:3px;border-radius:2px;background:var(--gray-200);transition:background var(--dur)}
+.dots i.on{background:var(--accent)}
+.dots i.new{animation:grow .5s var(--ease-out)}
+@keyframes grow{from{width:0;background:var(--danger)}}
+/* timing strip (same idea as Stage 1's blink-gap line) */
+.tl{position:relative;height:46px;margin:14px 10px 0}
+.tl[hidden]{display:none}
+.tl .ax{position:absolute;left:0;right:0;top:14px;height:1px;background:var(--gray-300)}
+.tl .win{position:absolute;top:6px;height:17px;background:var(--brand-200);transition:left .6s var(--ease-out),width .6s var(--ease-out)}
+.tl .win span{position:absolute;top:16px;font-size:11px;color:var(--text-sub);font-variant-numeric:tabular-nums;transform:translateX(-50%);white-space:nowrap}
+.tl .win span:last-child{left:100%}
+.tl b{position:absolute;top:10px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%}
+.tl b.p{background:var(--gray-500)}
+.tl b.now{top:8px;width:13px;height:13px;margin-left:-6.5px;background:var(--accent);animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.tl.bad b.now{background:var(--danger)}
+.tl b.now em{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);font:600 11px var(--font-body);font-style:normal;color:inherit;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tl b.now em{color:var(--accent)}.tl.bad b.now em{color:var(--danger)}
+.tl.steady b.p:nth-last-of-type(-n+3){background:var(--danger)}
+@keyframes pop{from{transform:scale(0)}}
+@media (prefers-reduced-motion:reduce){.dots i.new,.tl b.now{animation:none}.tl .win{transition:none}}
+
+/* ---- captcha card ---- */
+.card{margin:auto 0;background:var(--white);border:1px solid var(--gray-300);border-radius:4px;box-shadow:0 10px 32px rgba(16,38,47,.12);padding:8px}
+.card.shake{animation:shake .4s ease-out}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}45%{transform:translateX(6px)}70%{transform:translateX(-3px)}}
+.band{background:var(--accent);color:var(--white);padding:18px 18px 20px;min-height:118px}
+.band small{display:block;font-size:var(--fs-small);opacity:.9}
+.band h2{margin:6px 0 0;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.18;text-wrap:balance}
+.band h2 mark{background:none;color:inherit;font-weight:800;box-shadow:inset 0 -.36em 0 rgba(255,255,255,.28)}
+.band p{margin:8px 0 0;font-size:var(--fs-small);opacity:.9}
+/* distorted keyword: Solve Media-style warped text on a pale wash */
+.band .warp{display:none;margin-top:8px;width:100%;height:64px;background:#e6dbe8;border-radius:2px}
+.hdr-warp .band h2 mark{display:none}
+.hdr-warp .band .warp{display:block}
+
+.grid{display:grid;gap:6px;margin-top:6px}
+.grid.n2{grid-template-columns:1fr 1fr}
+.grid.n3{grid-template-columns:1fr 1fr 1fr}
+.grid.n4{grid-template-columns:1fr 1fr}
+.tile{position:relative;aspect-ratio:1;border:0;padding:0;background:var(--gray-100);cursor:pointer;overflow:hidden;
+  opacity:0;transform:scale(.96);transition:opacity .3s var(--ease-out),transform .3s var(--ease-out),filter .3s}
+.grid.in .tile{opacity:1;transform:none}
+.tile:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tile .art{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tile .art svg{width:100%;height:100%;display:block}
+/* placeholder photo: a color field plus what goes there */
+.ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:8px}
+.ph span{font-size:11px;line-height:1.3;color:rgba(0,0,0,.72);background:rgba(255,255,255,.78);padding:3px 5px;border-radius:2px}
+.n3 .ph span{font-size:10px}
+
+/* ---- the shared "captcha" treatment, applied to every image ---- */
+.fx .tile::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.fx .tile::after{content:"";position:absolute;inset:0;pointer-events:none}
+/* 原版: plain captcha wash */
+.fx.f-plain .tile .art{filter:url(#cap)}
+.fx.f-plain .tile::after{background:#e9e0ee;mix-blend-mode:multiply;opacity:.45}
+/* 梦核: lifted lavender shadows, glow, heavy grain, vignette */
+.fx.f-dream .tile .art{filter:url(#dream)}
+.fx.f-dream .tile::after{background:radial-gradient(circle at 50% 45%,transparent 45%,rgba(70,40,110,.38) 100%);mix-blend-mode:multiply}
+/* 故障: RGB split, horizontal tearing, scanlines */
+.fx.f-glitch .tile .art{filter:url(#glitch)}
+.fx.f-glitch .tile::after{background:repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 3px)}
+/* 混合: dream color + a little split + faint scanlines, and a tile twitches now and then */
+.fx.f-mix .tile .art{filter:url(#mix)}
+.fx.f-mix .tile::after{background:repeating-linear-gradient(0deg,rgba(40,0,60,.07) 0 1px,transparent 1px 3px),radial-gradient(circle at 50% 45%,transparent 55%,rgba(70,40,110,.24) 100%)}
+.fx .tile.twitch .art{filter:url(#tear)!important;transform:translateX(3px)}
+.fx .tile.twitch.picked .art{transform:scale(.86) translateX(3px)}
+
+/* pick + result */
+.tile .tick{position:absolute;top:-4px;left:-4px;z-index:2;width:34px;height:34px;border-radius:50%;background:var(--accent);border:3px solid #fff;display:grid;place-items:center;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.tile.picked .tick{transform:scale(1)}
+.tile.picked .art{transform:scale(.86);transition:transform .25s var(--ease-out)}
+.grid.done .tile{cursor:default}
+.grid.done .tile:not(.picked) .art{opacity:.45}
+.tile .pct{position:absolute;right:0;bottom:0;z-index:2;font:600 13px var(--font-body);font-variant-numeric:tabular-nums;color:#fff;background:rgba(16,38,47,.78);padding:3px 7px;opacity:0;transition:opacity .3s}
+.grid.done .tile .pct{opacity:1}
+.tile.picked .pct{background:var(--accent)}
+
+/* verdict + toolbar, inside the card like reCAPTCHA's red error line */
+.verdict{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:12px 4px 0;font-size:13px;line-height:1}
+.verdict .st{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px 0 8px;border-radius:var(--r-pill);font-weight:600}
+.verdict .st.ok{background:#e3f4e9;color:var(--success)}
+.verdict .st.bad{background:var(--danger-soft);color:var(--danger)}
+.verdict .st.warn{background:#fdf0d8;color:#8a5a00}
+.verdict .st.skip{background:var(--gray-100);color:var(--gray-700)}
+.verdict .stat{display:inline-flex;gap:6px;align-items:baseline;color:var(--text);font-size:13px}
+.verdict .stat .n{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.verdict .tag{height:22px;display:inline-flex;align-items:center;padding:0 8px;border:1px solid var(--gray-300);border-radius:4px;color:var(--gray-700);font-size:12px}
+.verdict:empty{display:none}
+
+.bar{display:flex;align-items:center;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid var(--gray-200)}
+.ib{width:40px;height:40px;border:0;background:none;color:var(--gray-500);display:grid;place-items:center;cursor:pointer;border-radius:4px}
+.ib:hover{color:var(--text);background:var(--gray-100)}
+.ib:focus-visible{outline:2px solid var(--accent)}
+.clock{margin-left:auto;margin-right:8px;font:500 13px var(--font-body);font-variant-numeric:tabular-nums;color:var(--gray-500)}
+.clock[hidden]{display:none}
+.go{height:44px;padding:0 22px;border:0;border-radius:2px;background:var(--accent);color:#fff;font:600 15px var(--font-body);letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.go:hover{background:var(--accent-hover)}
+.go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.go:disabled{background:var(--gray-200);color:var(--gray-500);cursor:default}
+.hint{font-size:12px;color:var(--text-sub);padding:6px 4px 0}
+.hint[hidden]{display:none}
+
+/* ---- review panel: only for looking at the frame, not part of the experience ---- */
+.dev{position:fixed;right:12px;bottom:12px;z-index:9;width:240px;background:rgba(255,255,255,.96);border:1px solid var(--gray-300);border-radius:10px;padding:12px;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.dev b{display:block;font-size:11px;color:var(--text-sub);font-weight:500;margin:8px 0 4px}
+.dev b:first-child{margin-top:0}
+.dev select{width:100%;font:12px var(--font-body);padding:4px}
+.dev label{display:flex;gap:6px;align-items:center;margin:3px 0;cursor:pointer}
+.dev .row{display:flex;gap:6px;flex-wrap:wrap}
+.dev .row button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dev .row button{font:11px var(--font-body);padding:4px 8px;border:1px solid var(--gray-300);background:#fff;border-radius:4px;cursor:pointer}
+.dev .x{position:absolute;top:6px;right:8px;border:0;background:none;cursor:pointer;color:var(--text-sub)}
+.dev.min{width:auto;padding:6px 10px}.dev.min>*:not(.x):not(.ttl){display:none}
+.dev .ttl{font-weight:600;font-size:12px;margin-bottom:4px;padding-right:20px}
+@media (max-width:760px){.dev{left:12px;right:12px;width:auto}}
+@media (prefers-reduced-motion:reduce){.tile,.card,.tile .tick,.tile .art{transition:none!important;animation:none!important}}
+html:lang(zh-CN){--font-body:Inter,PortalSans,"PingFang SC",sans-serif}
+html:lang(zh-CN) .band h2{font:400 24px/1.25 PortalPixel,"PingFang SC",sans-serif;letter-spacing:0}
+html:lang(zh-CN) .band h2 mark{font-weight:400}
+</style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
+</head>
+<body class="fx f-mix">
+<!-- the captcha texture: slight desaturation, crushed range, grain. Tweak here once, applies to every tile. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="cap" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values=".72"/>
+    <feComponentTransfer><feFuncR type="linear" slope=".86" intercept=".08"/><feFuncG type="linear" slope=".86" intercept=".08"/><feFuncB type="linear" slope=".86" intercept=".08"/></feComponentTransfer>
+    <feGaussianBlur stdDeviation=".35" result="soft"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .22 0" result="grain"/>
+    <feBlend in="soft" in2="grain" mode="multiply"/>
+  </filter>
+  <filter id="dream" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".78 .12 .06 0 .09  .08 .74 .12 0 .06  .10 .14 .78 0 .15  0 0 0 1 0" result="tint"/>
+    <feGaussianBlur in="tint" stdDeviation="4" result="haze"/>
+    <feComposite in="tint" in2="haze" operator="arithmetic" k2=".72" k3=".42" result="glow"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="11" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .42 0" result="grain"/>
+    <feBlend in="glow" in2="grain" mode="multiply"/>
+  </filter>
+  <filter id="glitch" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0 .035" numOctaves="1" seed="3" result="raw"/>
+    <feComponentTransfer in="raw" result="bands"><feFuncR type="discrete" tableValues=".5 .5 .5 .2 .5 .5 .5 .85 .5 .5 .35 .5"/></feComponentTransfer>
+    <feDisplacementMap in="SourceGraphic" in2="bands" scale="18" xChannelSelector="R" yChannelSelector="A" result="torn"/>
+    <feOffset in="torn" dx="3" result="ro"/><feColorMatrix in="ro" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="torn" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+    <feOffset in="torn" dx="-3" result="bo"/><feColorMatrix in="bo" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+    <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
+    <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="rgb"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="5" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .3 0" result="grain"/>
+    <feBlend in="rgb" in2="grain" mode="multiply"/>
+  </filter>
+  <filter id="mix" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".9 .06 .03 0 .05  .04 .86 .06 0 .04  .05 .08 .88 0 .09  0 0 0 1 0" result="tint"/>
+    <feGaussianBlur in="tint" stdDeviation="3" result="haze"/>
+    <feComposite in="tint" in2="haze" operator="arithmetic" k2=".75" k3=".35" result="glow"/>
+    <feOffset in="glow" dx="1.6" result="ro"/><feColorMatrix in="ro" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="glow" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="gb"/>
+    <feComposite in="r" in2="gb" operator="arithmetic" k2="1" k3="1" result="rgb"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="9" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .38 0" result="grain"/>
+    <feBlend in="rgb" in2="grain" mode="multiply"/>
+  </filter>
+  <filter id="tear" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0 .05" numOctaves="1" seed="21" result="raw"/>
+    <feComponentTransfer in="raw" result="bands"><feFuncR type="discrete" tableValues=".5 .1 .5 .5 .9 .5 .3 .5 .5 .75"/></feComponentTransfer>
+    <feDisplacementMap in="SourceGraphic" in2="bands" scale="30" xChannelSelector="R" yChannelSelector="A" result="torn"/>
+    <feOffset in="torn" dx="5" result="ro"/><feColorMatrix in="ro" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="torn" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="gb"/>
+    <feComposite in="r" in2="gb" operator="arithmetic" k2="1" k3="1"/>
+  </filter>
+  <filter id="warp" x="-5%" y="-20%" width="110%" height="140%">
+    <feTurbulence type="turbulence" baseFrequency=".018 .05" numOctaves="2" seed="7" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<main class="phone">
+  <div class="top"><span class="stage"><b data-i18n="quiz.stage">Stage 2</b><span data-i18n="quiz.intuition">Intuition</span></span><span class="dots" id="dots" role="img"></span></div>
+
+  <section class="card" id="card" aria-labelledby="kw">
+    <div class="band">
+      <small id="pre" data-i18n="quiz.tap">Tap one image</small>
+      <h2 id="kw"></h2>
+      <svg class="warp" id="warpSvg" viewBox="0 0 320 64" preserveAspectRatio="xMinYMid meet" aria-hidden="true"></svg>
+      <p id="post" data-i18n="quiz.noRight">There is no right answer.</p>
+    </div>
+    <div class="grid" id="grid" role="group" aria-labelledby="kw"></div>
+    <div class="tl" id="tl" aria-hidden="true" hidden></div>
+    <div class="verdict" id="verdict" aria-live="polite"></div>
+    <div class="hint" id="hint" hidden data-i18n="quiz.hint">Pick one. We time how long you take.</div>
+    <div class="bar">
+      <button class="ib" id="reshuffle" type="button" aria-label="New order" data-i18n-aria-label="quiz.shuffle"><img src="assets/svg/refresh.svg" alt="" width="22" height="22"></button>
+      <button class="ib" id="info" type="button" aria-label="Help" data-i18n-aria-label="quiz.help" aria-expanded="false"><img src="assets/svg/info.svg" alt="" width="22" height="22"></button>
+      <span class="clock" id="clock" aria-hidden="true">0.0 s</span>
+      <button class="go" id="go" type="button" disabled data-i18n="quiz.verify">Verify</button>
+    </div>
+  </section>
+</main>
+
+<aside class="dev" id="dev">
+  <button class="x" id="devx" type="button" aria-label="Collapse" data-i18n-aria-label="quiz.collapse">–</button>
+  <div class="ttl" data-i18n="preview.panel">看稿面板</div>
+  <b data-i18n="preview.question">题目</b>
+  <select id="pickQ"></select>
+  <b data-i18n="preview.effects">看效果</b>
+  <label><input type="checkbox" id="optFx" checked> <span data-i18n="preview.filter">统一滤镜</span></label>
+  <div class="row" id="fxPick" role="radiogroup" aria-label="滤镜版本" data-i18n-aria-label="preview.filters">
+    <button type="button" data-f="plain" data-i18n="preview.original">原版</button><button type="button" data-f="dream" data-i18n="preview.dream">梦核</button><button type="button" data-f="glitch" data-i18n="preview.glitch">故障</button><button type="button" data-f="mix" aria-pressed="true" data-i18n="preview.mix">混合</button>
+  </div>
+  <label><input type="checkbox" id="optWarp"> <span data-i18n="preview.warp">关键词用扭曲验证码字</span></label>
+  <label><input type="checkbox" id="optClock" checked> <span data-i18n="preview.clock">显示计时</span></label>
+  <b data-i18n="preview.simulate">直接看反馈</b>
+  <div class="row">
+    <button type="button" data-sim="fast" data-i18n="preview.fast">过快 0.7s</button>
+    <button type="button" data-sim="slow" data-i18n="preview.slow">过慢 5.8s</button>
+    <button type="button" data-sim="major" data-i18n="preview.popular">通过（热门）</button>
+    <button type="button" data-sim="minor" data-i18n="preview.unpopular">通过（冷门）</button>
+    <button type="button" data-sim="skip" data-i18n="preview.skip">兜底放行</button>
+    <button type="button" data-sim="steady" data-i18n="preview.steady">节奏太稳</button>
+  </div>
+</aside>
+
+<script>i18n.apply(document);</script>
+<script src="flow.js"></script>
+<script src="bloom.js"></script>
+<script>
+const $=id=>document.getElementById(id),wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---------- A: geometric tiles, drawn here (final art can replace them 1:1) ---------- */
+const S=(body,bg='#fff')=>`<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="${bg}"/>${body}</svg>`;
+const star=(cx,cy,r1,r2,n)=>{let p=[];for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,r=i%2?r2:r1;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return p.join(' ');};
+const dotsField=(skip)=>{let s='';for(let y=0;y<6;y++)for(let x=0;x<6;x++){if(skip(x,y))continue;s+=`<circle cx="${14+x*14.4}" cy="${14+y*14.4}" r="3.2" fill="#191b1a"/>`;}return s;};
+const ART={
+  kiki:S(`<polygon points="${star(50,52,40,13,9)}" fill="#191b1a"/>`),
+  bouba:S(`<path d="M28 62c-12 0-16-16-6-22-2-14 16-22 26-12 6-12 26-10 28 6 12 2 14 22 0 26-4 10-20 12-26 4-8 8-20 6-22-2z" fill="#191b1a"/>`),
+  dotCorner:S(`<circle cx="86" cy="86" r="4.5" fill="#cb3e34"/>`),
+  dotCrowd:S(dotsField((x,y)=>x===2&&y===2)+`<circle cx="42.8" cy="42.8" r="3.6" fill="#cb3e34"/>`),
+  dotCenter:S(`<circle cx="50" cy="50" r="4.5" fill="#cb3e34"/>`),
+  lineStraight:S(`<line x1="14" y1="50" x2="86" y2="50" stroke="#191b1a" stroke-width="4" stroke-linecap="round"/>`),
+  lineShaky:S(`<path d="M14 50 ${Array.from({length:36},(_,i)=>`L${16+i*2} ${50+(i%2?1.4:-1.2)*(i%3?1:.6)}`).join(' ')}" fill="none" stroke="#191b1a" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>`),
+  lineHide:S(`<path d="M12 74c6 0 14 2 18 8 2 4-2 8-6 6" fill="none" stroke="#191b1a" stroke-width="4" stroke-linecap="round"/>`),
+  waveSaw:S(`<path d="M6 50 ${Array.from({length:11},(_,i)=>`L${10+i*8} ${i%2?32:68}`).join(' ')}" fill="none" stroke="#191b1a" stroke-width="3.6" stroke-linejoin="miter"/>`),
+  waveSlow:S(`<path d="M0 50 C15 28 35 28 50 50 S85 72 100 50" fill="none" stroke="#191b1a" stroke-width="3.6"/><path d="M0 64 C15 42 35 42 50 64 S85 86 100 64" fill="none" stroke="#191b1a" stroke-width="2.2" opacity=".5"/>`),
+  waveDense:S(Array.from({length:26},(_,i)=>`<line x1="${8+i*3.4}" y1="22" x2="${8+i*3.4}" y2="78" stroke="#191b1a" stroke-width="1.3"/>`).join('')),
+  tetra:S(`<polygon points="50,14 82,74 50,86" fill="#3d4245"/><polygon points="50,14 18,74 50,86" fill="#191b1a"/><polygon points="50,14 82,74 18,74" fill="#6b7275" opacity=".0"/>`,'#f2f4f5'),
+  sphere:S(`<defs><radialGradient id="g1" cx=".35" cy=".35" r=".75"><stop offset="0" stop-color="#e3e7e9"/><stop offset=".6" stop-color="#6b7275"/><stop offset="1" stop-color="#191b1a"/></radialGradient></defs><circle cx="50" cy="52" r="30" fill="url(#g1)"/>`,'#f2f4f5'),
+  cylinder:S(`<path d="M20 50v14c0 6 13 10 30 10s30-4 30-10V50" fill="#3d4245"/><ellipse cx="50" cy="50" rx="30" ry="10" fill="#9aa1a4"/>`,'#f2f4f5'),
+  blueGray:S('', '#a9b8c4'),orange:S('', '#e8935a'),dimYellow:S('', '#c7b05a'),inkGreen:S('', '#2f4a3c'),
+};
+/* B: real photos, placeholder color fields until the images arrive */
+const P=(label,bg)=>`<div class="ph" style="background:${bg}"><span>${label}</span></div>`;
+
+/* pct = made-up share of humans per option, for the "quantified report" */
+const BANK=[
+  {id:'A1',post:'',opts:[['kiki',ART.kiki,81],['bouba',ART.bouba,19]]},
+  {id:'A2',opts:[['corner',ART.dotCorner,52],['crowd',ART.dotCrowd,37],['center',ART.dotCenter,11]]},
+  {id:'A3',opts:[['straight',ART.lineStraight,9],['shaky',ART.lineShaky,46],['hide',ART.lineHide,45]]},
+  {id:'A4',opts:[['saw',ART.waveSaw,6],['slow',ART.waveSlow,84],['dense',ART.waveDense,10]]},
+  {id:'A5',opts:[['tetra',ART.tetra,73],['sphere',ART.sphere,15],['cyl',ART.cylinder,12]]},
+  {id:'A6',opts:[['bg',ART.blueGray,41],['or',ART.orange,14],['yl',ART.dimYellow,28],['gr',ART.inkGreen,17]]},
+  {id:'B7',photo:1,opts:[['velvet',P(t('tile.velvet'),'linear-gradient(135deg,#5a2a3c,#8a4a5e)'),11],['sand',P(t('tile.sand'),'linear-gradient(135deg,#b9a688,#8c7a5e)'),63],['metal',P(t('tile.metal'),'linear-gradient(90deg,#9ea4a8,#d8dcde,#8d9397)'),26]]},
+  {id:'B8',photo:1,opts:[['warm',P(t('tile.warm'),'linear-gradient(160deg,#f2c47c,#b8794a)'),8],['fluor',P(t('tile.fluor'),'linear-gradient(180deg,#eef3f1,#c9d4d0)'),38],['grey',P(t('tile.grey'),'linear-gradient(160deg,#9fb0bf,#5e6f7d)'),54]]},
+  {id:'B9',photo:1,opts:[['frame',P(t('tile.frame'),'linear-gradient(135deg,#ece6dc,#c9bfae)'),47],['paste',P(t('tile.paste'),'linear-gradient(135deg,#f4f4f2,#cfd6dc)'),39],['box',P(t('tile.box'),'linear-gradient(135deg,#c9a06c,#94703f)'),14]]},
+  {id:'B10',photo:1,opts:[['storm',P(t('tile.storm'),'linear-gradient(180deg,#5f6670,#9aa0a8)'),84],['thin',P(t('tile.thin'),'linear-gradient(180deg,#8fb7dc,#d6e6f2)'),5],['pink',P(t('tile.pink'),'linear-gradient(180deg,#e9a7b4,#f6d3b8)'),11]]},
+  {id:'B11',photo:1,opts:[['c1',P(t('tile.c1'),'linear-gradient(135deg,#3a3d42,#6b6f75)'),58],['c2',P(t('tile.c2'),'linear-gradient(135deg,#d8d2c6,#a59c8c)'),31],['c3',P(t('tile.c3'),'radial-gradient(circle at 50% 40%,#f3ead6,#b7ab92)'),11]]},
+].map(question => {
+  const prefix = 'quiz.' + question.id;
+  const kw = t(prefix + '.keyword');
+  return {...question, kw, q: t(prefix + '.question', {keyword: '<mark>'+kw+'</mark>'})};
+});
+
+/* ---------- state ----------
+   11-22 她选的折磨方式 1「节奏太稳」：每过一题，可接受的耗时窗口就收窄一截；
+   窗口逼你答得越来越稳，而最近三题太稳又会被判成定时脚本，加一题。第三次太稳才放行。 */
+const WIN=[[1.2,5.0],[1.5,4.2],[1.8,3.6],[2.1,3.2],[2.3,2.9]];
+const STEADY=0.9;            // last three answers within this many seconds = "too regular"
+let idx=0,need=3,passed=[],steadyFlags=0,q=null,order=[],t0=0,raf=0,busy=false,strikes=0,win=WIN[0];
+const params=new URLSearchParams(location.search);
+// run order: geometric and photo questions take turns, no repeats
+function makeRun(first){const A=shuffle(BANK.filter(b=>!b.photo&&b!==first)),B=shuffle(BANK.filter(b=>b.photo&&b!==first)),r=first?[first]:[];
+  while(A.length||B.length){const want=r.length%2?B:A,alt=want===A?B:A;r.push((want.length?want:alt).shift());}return r;}
+let run=makeRun();
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+function setDots(added){const d=$('dots');d.innerHTML=Array.from({length:need},(_,i)=>`<i class="${i<=idx?'on':''}${added&&i===need-1?' new':''}"></i>`).join('');
+  d.setAttribute('aria-label',t('quiz.progress', {n: Math.min(idx+1,need), total: need}));}
+function drawWarp(text){
+  const lines=Array.from({length:3},()=>{const y1=8+Math.random()*48,y2=8+Math.random()*48;return `<path d="M${Math.random()*40} ${y1} Q160 ${Math.random()*64} ${280+Math.random()*40} ${y2}" stroke="#3a3348" stroke-width="1.6" fill="none"/>`;}).join('');
+  $('warpSvg').innerHTML=`<g filter="url(#warp)"><text x="10" y="44" font-family="Comic Sans MS,Chalkboard SE,Marker Felt,sans-serif" font-size="${text.length>14?24:34}" fill="#2b3a24" transform="rotate(-2 160 32)">${text}</text>${lines}</g>`;
+}
+/* verdict row: status chip, the number that matters, tags */
+const IC={ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',bad:'<path d="M7 7l10 10M17 7L7 17"/>',warn:'<path d="M12 8v5M12 16.5v.5"/><path d="M10.3 4.2L2.8 17.5A2 2 0 004.5 20.5h15a2 2 0 001.7-3L13.7 4.2a2 2 0 00-3.4 0z"/>',skip:'<path d="M5 12h12M13 7l5 5-5 5"/>'};
+const sec=t=>`<span class="n">${t.toFixed(1)}s</span>`;
+const V=(kind,label,stat,tags)=>`<span class="st ${kind}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[kind]}</svg>${label}</span><span class="stat">${stat}</span>${tags.map(t=>`<span class="tag">${t}</span>`).join('')}`;
+/* timing strip: 0–6 s, the window you had to hit, your earlier answers, this one */
+const X=t=>Math.max(0,Math.min(100,t/6*100));
+function drawTL(now,kind){
+  const tl=$('tl');tl.hidden=false;
+  const prev=passed.map(t=>`<b class="p" style="left:${X(t)}%"></b>`).join('');
+  tl.className='tl '+(kind||'');
+  tl.innerHTML=`<div class="win" style="left:${X(win[0])}%;width:${X(win[1])-X(win[0])}%"><span>${win[0].toFixed(1)}</span><span>${win[1].toFixed(1)} s</span></div><div class="ax"></div>${prev}`+
+    (now!=null?`<b class="now" style="left:${X(now)}%"><em>${now.toFixed(1)} s</em></b>`:'');
+}
+
+function render(fresh){
+  $('kw').innerHTML=q.q;drawWarp(q.kw);
+  if(fresh)order=q.opts.map((_,i)=>i);
+  const g=$('grid');g.className='grid n'+q.opts.length;
+  g.innerHTML=order.map(i=>{const [k,art,pct]=q.opts[i];
+    return `<button class="tile" type="button" data-i="${i}" aria-label="${t('quiz.option', {name: t('option.'+k)})}"><span class="art">${art}</span>
+      <span class="tick" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span class="pct">${pct}%</span></button>`;}).join('');
+  g.querySelectorAll('.tile').forEach(b=>b.onclick=()=>choose(+b.dataset.i,b));
+  $('go').disabled=true;$('go').textContent=t('quiz.verify');
+  startClock();  // the clock starts when the tiles are put on the page, so a click can never land before it
+  requestAnimationFrame(()=>requestAnimationFrame(()=>g.classList.add('in')));
+}
+function startClock(){cancelAnimationFrame(raf);t0=performance.now();busy=false;
+  const tick=()=>{$('clock').textContent=((performance.now()-t0)/1000).toFixed(1)+' s';raf=requestAnimationFrame(tick);};tick();}
+
+function load(i,added){idx=i;q=run[i%run.length];strikes=0;win=WIN[Math.min(passed.length,WIN.length-1)];
+  $('verdict').innerHTML='';$('verdict').className='verdict';$('tl').hidden=passed.length===0;if(passed.length)drawTL(null);
+  setDots(added);render(true);}
+
+async function choose(i,btn,forced){
+  if(busy)return;busy=true;cancelAnimationFrame(raf);
+  const dt=forced?.dt??(performance.now()-t0)/1000;
+  $('clock').textContent=dt.toFixed(1)+' s';
+  const v=$('verdict');
+  const tooFast=dt<win[0],tooSlow=dt>win[1];
+  if((tooFast||tooSlow)&&strikes<2){
+    strikes++;
+    drawTL(dt,'bad');
+    v.className='verdict bad';
+    v.innerHTML=tooFast
+      ? V('bad',t('verdict.fast'),sec(dt),[t('verdict.script')])
+      : V('bad',t('verdict.slow'),sec(dt),[t('verdict.model')]);
+    $('card').classList.remove('shake');void $('card').offsetWidth;$('card').classList.add('shake');
+    await wait(900);
+    order=shuffle(order);$('grid').classList.remove('in');await wait(180);render(false);return;
+  }
+  // in the window (or the third strike gets waved through)
+  btn.classList.add('picked');$('grid').classList.add('done');
+  const pct=q.opts[i][2],top=Math.max(...q.opts.map(o=>o[2]));
+  v.className='verdict';
+  let added=false,done=false;
+  if(tooFast||tooSlow){
+    drawTL(dt,'bad');
+    v.innerHTML=V('skip',t('verdict.skipped'),sec(dt),[t('verdict.hesitation')]);
+  }else{
+    drawTL(dt);passed.push(dt);
+    const last=passed.slice(-3),steady=last.length===3&&Math.max(...last)-Math.min(...last)<STEADY;
+    if(steady&&steadyFlags<2){
+      steadyFlags++;need++;added=true;drawTL(null,'steady');
+      v.className='verdict';
+      v.innerHTML=V('warn',t('verdict.regular'),last.map(sec).join(''),[t('verdict.timed'),t('verdict.add')]);
+    }else if(steady){
+      drawTL(null,'steady');done=true;
+      v.innerHTML=V('ok',t('verdict.letThrough'),last.map(sec).join(''),[t('verdict.monotony')]);
+    }else if(pct===top){
+      v.innerHTML=V('ok',t('verdict.pass'),t('verdict.picked', {pct}),[t('verdict.mainstream')]);
+    }else{
+      v.innerHTML=V('ok',t('verdict.pass'),t('verdict.picked', {pct}),[t('verdict.outlier')]);
+    }
+  }
+  if(added)setDots(true);
+  const last=done||idx+1>=need;
+  $('go').disabled=false;$('go').textContent=last?t('quiz.verify'):t('quiz.next');$('go').dataset.end=last?'1':'';$('go').focus();
+}
+$('go').onclick=async()=>{
+  if(!$('go').dataset.end){$('grid').classList.remove('in');await wait(200);load(idx+1);return;}
+  idx=need;setDots();
+  const r=$('go').getBoundingClientRect();
+  await Bloom.play({from:{x:r.left+r.width/2,y:r.top+r.height/2},color:'pass',hold:450});
+  flowNext();
+};
+$('reshuffle').onclick=()=>{if($('grid').classList.contains('done'))return;order=shuffle(order);$('grid').classList.remove('in');setTimeout(()=>render(false),150);};
+$('info').onclick=()=>{const h=$('hint');h.hidden=!h.hidden;$('info').setAttribute('aria-expanded',String(!h.hidden));};
+
+/* ---------- review panel ---------- */
+const sel=$('pickQ');
+sel.innerHTML='<option value="">'+t('preview.random')+'</option>'+BANK.map((b,i)=>`<option value="${i}">${b.id}  ${b.kw}${b.photo?t('preview.photo'):''}</option>`).join('');
+function reset(first){passed=[];steadyFlags=0;need=3;run=makeRun(first);load(0);}
+sel.onchange=()=>reset(sel.value===''?null:BANK[+sel.value]);
+$('optFx').onchange=e=>document.body.classList.toggle('fx',e.target.checked);
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
+  document.body.classList.remove('f-plain','f-dream','f-glitch','f-mix');document.body.classList.add('f-'+b.dataset.f);
+  document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));});
+// glitch twitch: every so often one tile tears for a split second (mix and glitch only)
+const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function twitch(){setTimeout(()=>{
+  if(!calm&&/f-(mix|glitch)/.test(document.body.className)&&document.body.classList.contains('fx')){
+    const ts=[...document.querySelectorAll('#grid .tile')];const t=ts[Math.random()*ts.length|0];
+    if(t){t.classList.add('twitch');setTimeout(()=>t.classList.remove('twitch'),90+Math.random()*120);}}
+  twitch();},700+Math.random()*1800);})();
+$('optWarp').onchange=e=>document.body.classList.toggle('hdr-warp',e.target.checked);
+$('optClock').onchange=e=>{$('clock').hidden=!e.target.checked;};
+$('devx').onclick=()=>$('dev').classList.toggle('min');
+document.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>{
+  const s=b.dataset.sim;load(idx);
+  setTimeout(()=>{
+    const opts=q.opts.map((o,i)=>({i,p:o[2]})).sort((a,b)=>b.p-a.p);
+    const pick=s==='minor'?opts[opts.length-1].i:opts[0].i;
+    const btn=$('grid').querySelector(`[data-i="${pick}"]`);
+    if(s==='skip'){strikes=2;choose(pick,btn,{dt:6.3});return;}
+    if(s==='steady'){choose(pick,btn,{dt:(passed.at(-1)??2.5)+(Math.random()-.5)*.4});return;}
+    const dts=[2.0,3.1,1.7,2.8,2.4];choose(pick,btn,{dt:s==='fast'?.7:s==='slow'?5.8:Math.min(win[1]-.1,Math.max(win[0]+.1,dts[passed.length%5]))});
+  },400);
+});
+if(params.has('nodev'))$('dev').hidden=true;
+if(innerWidth<760)$('dev').classList.add('min');  // folded on phones so it doesn't cover the card
+
+load(0);
+</script>
+</body>
+</html>

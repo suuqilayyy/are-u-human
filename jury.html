@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Gate · Final question</title>
+<title data-i18n="jury.title">Gate · Final question</title>
 <link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="gate.css">
 <style>
@@ -24,44 +25,47 @@
 .dots i.on{border:0;background:var(--on);box-shadow:0 0 0 6px rgba(47,174,75,.15)}
 .count{font-family:Doto,monospace;font-weight:800;font-size:28px;letter-spacing:.06em}
 </style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
-<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
+<iframe class="behind" data-background-page="index.html" tabindex="-1" aria-hidden="true"></iframe>
 <div class="veil"></div>
 <div class="phone">
   
   <section id="ask">
     <div class="head">
-            <div class="line">One last question.</div>
-      <div class="sub">Were these made by humans?</div>
+            <div class="line" data-i18n="jury.last">One last question.</div>
+      <div class="sub" data-i18n="jury.made">Were these made by humans?</div>
     </div>
     <div class="cards" id="cards"></div>
   </section>
 
   <section class="wait" id="wait" aria-live="polite">
-        <div class="line">Three humans must vouch for you.</div>
+        <div class="line" data-i18n="jury.vouchNeeded">Three humans must vouch for you.</div>
     <div class="dots"><i></i><i></i><i></i></div>
     <div class="count" id="count">0 / 3</div>
   </section>
 
   <div class="btns">
-    <button class="pri" type="button" id="submit" disabled>Submit</button>
-    <button type="button" id="vouch" hidden>I vouch this person is human</button>
+    <button class="pri" type="button" id="submit" disabled data-i18n="jury.submit">Submit</button>
+    <button type="button" id="vouch" hidden data-i18n="jury.vouch">I vouch this person is human</button>
   </div>
 </div>
+<script>i18n.apply(document);</script>
 <script src="flow.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 // Samples: other visitors' answers mixed with agent-made ones. Placeholder content.
 const M=[
-  {src:'Visitor #031 · 21:14',text:'"the smell of my grandmas cupboard?? like old oranges and soap"',who:'human'},
-  {src:'Visitor #039 · 22:02',text:'"Petrichor on a warm summer evening, a scent that always reminds me of home."',who:'agent'},
-  {src:'Visitor #044 · 23:40',text:'"mosquito coil. i hated it. now i miss it"',who:'human'}
+  {src:t('jury.visitor', {id: '031', time: '21:14'}),text:t('jury.sample1'),who:'human'},
+  {src:t('jury.visitor', {id: '039', time: '22:02'}),text:t('jury.sample2'),who:'agent'},
+  {src:t('jury.visitor', {id: '044', time: '23:40'}),text:t('jury.sample3'),who:'human'}
 ];
 const pick={};
 M.forEach((m,i)=>{
   const c=document.createElement('div');c.className='card';c.id='c'+i;
-  c.innerHTML=`<div class="src">Sample ${i+1}</div><p>${m.text}</p><div class="seg" role="group" aria-label="Sample ${i+1}"><button type="button" data-v="human" aria-pressed="false">Human</button><button type="button" data-v="agent" aria-pressed="false">Agent</button></div>`;
+  c.innerHTML=`<div class="src">${t('jury.sample', {n: i+1})}</div><p>${m.text}</p><div class="seg" role="group" aria-label="${t('jury.sample', {n: i+1})}"><button type="button" data-v="human" aria-pressed="false">${t('jury.human')}</button><button type="button" data-v="agent" aria-pressed="false">${t('jury.agent')}</button></div>`;
   c.querySelectorAll('button').forEach(b=>b.onclick=()=>{
     pick[i]=b.dataset.v;c.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
     $('submit').disabled=Object.keys(pick).length<M.length;
@@ -69,8 +73,9 @@ M.forEach((m,i)=>{
   $('cards').appendChild(c);
 });
 $('submit').onclick=()=>{
-  M.forEach((m,i)=>{const c=$('c'+i);c.classList.add('reveal',m.who==='human'?'hu':'ag');c.querySelector('.src').textContent=m.src+' · '+(m.who==='human'?'Human':'Agent');});
+  M.forEach((m,i)=>{const c=$('c'+i);c.classList.add('reveal',m.who==='human'?'hu':'ag');c.querySelector('.src').textContent=m.src+' · '+(m.who==='human'?t('jury.human'):t('jury.agent'));});
   $('submit').disabled=true;
+  if(M.every((m,i)=>pick[i]===m.who)){setTimeout(()=>flowNext(),2600);return;}
   setTimeout(()=>{$('ask').style.display='none';$('wait').style.display='block';$('submit').hidden=true;$('vouch').hidden=false;$('vouch').focus();},2600);
 };
 let n=0;

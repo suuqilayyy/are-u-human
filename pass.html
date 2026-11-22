@@ -2,33 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Gate · Human Pass</title>
+<title data-i18n="pass.title">Gate · Human Pass</title>
+<!-- 7 · 人类通行证，用 pass-lab.html 的 A 版（证件卡 + 哼歌小人） -->
 <link href="https://fonts.googleapis.com/css2?family=Doto:wght@800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="gate.css">
 <style>
-.pass{margin-top:40px;border-radius:24px;padding:22px;aspect-ratio:1.58;display:flex;flex-direction:column;justify-content:space-between;
-  background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.55));border:1px solid rgba(255,255,255,.9);box-shadow:0 16px 40px rgba(20,30,60,.15)}
-.pass .k{font-family:Doto,monospace;font-weight:800;font-size:11px;letter-spacing:.12em;color:var(--sub)}
-.pass .id{font-family:Doto,monospace;font-weight:800;font-size:26px;letter-spacing:.04em}
-.pass .row{display:flex;justify-content:space-between;align-items:flex-end;font-size:13px}
-.basis{margin-top:24px;text-align:center}
+@font-face{font-family:Lingguang;src:url(assets/fonts/lingguang.ttf) format("truetype");font-display:swap}
+:root{--green:#a6cf5b;--card:#fbfbf9;--hand:Lingguang,"Gochi Hand",cursive}
+.card{position:relative;width:100%;aspect-ratio:1.586;margin-top:56px}
+svg.dd{position:absolute;overflow:visible;pointer-events:none;filter:url(#wob)}
+.dd *{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dd .fill{fill:var(--card)}
+.draw *{stroke-dasharray:1;stroke-dashoffset:1;animation:ink .6s cubic-bezier(.3,.6,.3,1) forwards}
+@keyframes ink{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.draw *{animation:none;stroke-dashoffset:0}}
+.hand{font-family:var(--hand)}
+.A{background:var(--card);border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.05),0 14px 30px rgba(0,0,0,.1)}
+.A .t{position:absolute;left:18px;top:15px;font-size:22px;line-height:1}
+.A .meta{position:absolute;left:58%;top:34%;font-size:13px;line-height:1.5}
+.A .meta b{font-weight:400;font-size:22px;display:block;line-height:1.1}
+.A .rule{position:absolute;left:18px;right:18px;bottom:12px;border-top:1.5px dashed #c8c8c2;padding-top:7px;font-family:var(--hand);font-size:12px;line-height:1.3}
+.A .rule .zh{display:block;font-size:10.5px;color:var(--sub);margin-top:2px}
+html:lang(en) .A .rule .zh{display:none}
+.basis{margin-top:28px;text-align:center}
 </style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
-<iframe class="behind" src="index.html" tabindex="-1" aria-hidden="true"></iframe>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="wob"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="5"/><feDisplacementMap in="SourceGraphic" scale="1.8"/></filter></svg>
+<iframe class="behind" data-background-page="index.html" tabindex="-1" aria-hidden="true"></iframe>
 <div class="veil"></div>
 <div class="phone">
-    <div class="pass" aria-label="Human Pass">
-    <div class="k">NEVERLAND · HUMAN PASS</div>
-    <div class="id">VISITOR #0047</div>
-    <div class="row"><div><div class="k">VALID FOR</div>24 hours</div><div><div class="k">CAMERA</div>Must stay on</div></div>
+  <div class="card A" id="A" aria-label="Human Pass" data-i18n-aria-label="pass.label">
+    <div class="t hand" lang="en">HUMAN PASS</div>
+    <div class="meta hand" lang="en"><b>No.0047</b>verified human<br>Neverland</div>
+    <div class="rule" lang="en">you still need to verify at least once every 24 hours to stay human.<span class="zh" lang="zh-CN">要继续当人类，每 24 小时至少要再验证一次。</span></div>
   </div>
   <div class="basis">
-    <div class="line">Verified by 3 humans who vouched for you.</div>
+    <div class="line" lang="en" data-i18n="pass.basis">You are human.</div>
   </div>
-  <div class="btns"><button class="pri" type="button" onclick="flowNext()">Enter Neverland</button></div>
+  <div class="btns"><button class="pri" type="button" onclick="flowNext()" data-i18n="pass.enter">Enter Neverland</button></div>
 </div>
+<script>i18n.apply(document);</script>
 <script src="flow.js"></script>
+<script>
+const G={
+  // 站着哼歌的小人：头微仰、张嘴，双手插兜感
+  singer:`<circle cx="46" cy="22" r="9" class="fill"/><path d="M50 25 c1.5 1 2.5 1 3.5 0"/><path d="M42 20 l0 1.5"/>
+    <path d="M38 32 C36 44 35 54 37 64 L41 64 L44 46 L47 64 L52 64 C54 52 54 42 52 32 C48 30 42 30 38 32 Z" class="fill"/>
+    <path d="M38 34 C32 42 32 50 38 54 M52 34 C58 40 59 48 54 54"/>
+    <path d="M37 64 L35 86 L41 86 L43 66 M48 66 L50 86 L56 86 L52 64"/><path d="M33 87 L41 87 M50 87 L58 87"/>`,
+  notes:`<ellipse cx="10" cy="40" rx="5.5" ry="4" transform="rotate(-20 10 40)"/><path d="M15 38 L14.5 12 C22 10 30 8 37 6 L37.5 32"/><ellipse cx="32" cy="34" rx="5.5" ry="4" transform="rotate(-20 32 34)"/><path d="M15 18 C22 16 30 14 37 12"/>`,
+  note:`<ellipse cx="12" cy="38" rx="6" ry="4.5" transform="rotate(-20 12 38)"/><path d="M17.5 36 L17 8 C23 12 29 14 28 22"/>`,
+  // 树（外轮廓一笔）+ 躺着的人 + 杯子
+};
+function draw(el,k,{x,y,w,vb=100,rot=0,color='var(--ink)',sw=1.6,delay=0,anim=true}){
+  const s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  s.setAttribute('viewBox',`0 0 ${vb} ${vb}`);s.setAttribute('class','dd'+(anim?' draw':''));
+  Object.assign(s.style,{left:x,top:y,width:w+'px',height:w+'px',transform:`rotate(${rot}deg)`});
+  s.innerHTML=`<g stroke="${color}" stroke-width="${sw*vb/w*1.9}">${G[k]}</g>`;
+  if(anim)s.querySelectorAll('g *').forEach((p,i)=>{p.setAttribute('pathLength',1);p.style.animationDelay=(delay+i*.09)+'s'});
+  el.appendChild(s);return s;
+}
+function build(){
+  document.querySelectorAll('.dd').forEach(n=>n.remove());
+  const A=document.getElementById('A');
+  const k=Math.min(1.3,(A.clientWidth/474)**1.5);
+  draw(A,'singer',{x:'8%',y:'17%',w:165*k,delay:.1});
+  draw(A,'notes',{x:200*k+'px',y:'31%',w:46*k,vb:50,rot:6,color:'var(--green)',sw:1.8,delay:.9});
+  draw(A,'note',{x:256*k+'px',y:'23%',w:26*k,vb:50,rot:-10,color:'var(--green)',sw:1.8,delay:1.2});
+  draw(A,'note',{x:'84%',y:'8%',w:22,vb:50,rot:12,color:'var(--ink)',delay:1.4});
+}
+document.fonts.ready.then(build);
+</script>
 </body>
 </html>
