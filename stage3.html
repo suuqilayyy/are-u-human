@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title data-i18n="voice.title">Human Verification Portal | Voice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Noto+Serif+SC:wght@600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+/* Stage 3 · Voice. Two looks on one flow, picked with ?v=call | ?v=form (or the review panel):
+   call = Gate phones you, an automated voice line gives instructions;
+   form = a printed voiceprint check form that gets a red stamp.
+   Round 1: read it in a described tone, always rejected (too flat = TTS, too much = acting).
+   Round 2: the tone becomes two locked numbers, and you get a percentage to correct. */
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+.app{position:relative;min-height:100dvh;width:min(440px,100%);margin:0 auto;display:flex;flex-direction:column;gap:14px;padding:24px 16px 22px}
+.only-call,.only-form{display:none}
+.v-call .only-call,.v-form .only-form{display:revert}
+[hidden]{display:none!important}
+
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:3px;border-radius:2px;background:var(--dot)}
+.dots i.on{background:var(--dot-on)}
+
+/* three steps: the one you're on is filled */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;align-items:center;gap:6px;font-size:12px;line-height:1.25;padding:8px;border-radius:var(--step-r);color:var(--step-fg);background:var(--step-bg);transition:background .2s,color .2s}
+.steps li::before{content:counter(s);flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;font-weight:700;font-size:11px;border:1.5px solid currentColor}
+.steps li.on{background:var(--step-on-bg);color:var(--step-on-fg);font-weight:600}
+.steps li.on::before{background:var(--step-on-fg);color:var(--step-on-bg);border-color:var(--step-on-fg)}
+
+/* what to say */
+.k{font-size:12px;color:var(--sub);margin:0 0 4px}
+.tone{font-size:17px;font-weight:600;line-height:1.35}
+.line{font-size:32px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.params{display:grid;gap:12px;padding-top:4px}
+.prm{display:grid;grid-template-columns:4.6em 1fr 3.4em;align-items:center;gap:10px;font-size:14px}
+.prm .tr{position:relative;height:10px;border-radius:5px;background:var(--track)}
+.prm .tg{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--fill)}
+.prm .tg::after{content:"";position:absolute;right:-1px;top:-5px;width:3px;height:20px;background:var(--fill-edge)}
+.prm .me{position:absolute;top:-4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--bad);border:3px solid var(--me-ring);opacity:0;transition:left .7s var(--ease-out),opacity .3s}
+.prm.show .me{opacity:1}
+.prm .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.prm .v small{display:block;font-weight:600;font-size:11px;color:var(--bad);opacity:0}
+.prm.show .v small{opacity:1}
+.lock{width:12px;height:12px;vertical-align:-1px;margin-left:3px;opacity:.6}
+
+.wave{position:relative;height:96px}
+.wave canvas{width:100%;height:100%;display:block}
+.wave .live{position:absolute;right:8px;top:6px;font-size:12px;font-weight:600;color:var(--bad);display:none;align-items:center;gap:6px}
+.rec .wave .live{display:flex}
+.wave .live i{width:8px;height:8px;border-radius:50%;background:var(--bad);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* the rejection: title, why (with numbers), what to do next */
+.verdict{position:relative}
+.verdict h2{margin:0;font-size:19px;line-height:1.3;color:var(--bad)}
+.verdict p{margin:6px 0 0;font-size:14px;line-height:1.5}
+.verdict .nx{margin-top:10px;font-weight:700}
+.verdict .nx::before{content:"→ "}
+.err{font-size:14px;color:var(--bad)}
+.err:empty{display:none}
+.shake{animation:shake .45s ease-out}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}45%{transform:translateX(8px)}70%{transform:translateX(-4px)}}
+
+.act{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+.clock{font-size:13px;font-variant-numeric:tabular-nums;color:var(--sub)}
+#go{cursor:pointer;font:700 16px var(--font-body)}
+#go:focus-visible{outline:3px solid var(--fill-edge);outline-offset:4px}
+
+/* ================= look 1 · incoming call ================= */
+.v-call{--bg:#0c171d;--fg:#f2f6f7;--sub:#9db1ba;--bad:#ff6b5e;--dot:rgba(255,255,255,.18);--dot-on:#fff;
+  --step-r:12px;--step-bg:rgba(255,255,255,.06);--step-fg:#8299a3;--step-on-bg:#fff;--step-on-fg:#0c171d;
+  --track:rgba(255,255,255,.12);--fill:rgba(126,200,227,.45);--fill-edge:#7ec8e3;--me-ring:#0c171d;
+  --wave:#7ec8e3;--wave-dim:rgba(255,255,255,.18);--wave-hot:#ff6b5e;--wave-flat:#6f828b;
+  background:radial-gradient(120% 70% at 50% 0%,#1d3a47 0%,#0c171d 60%) fixed;color:var(--fg)}
+.v-call .who{display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:6px}
+.v-call .av{width:64px;height:64px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 6px rgba(255,255,255,.06)}
+.v-call .av img{width:38px;height:38px}
+.v-call .who b{font-size:18px;font-weight:600}
+.v-call .who small{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+.v-call .who .dots{margin-top:4px}
+.v-call .ask{background:rgba(255,255,255,.08);border-radius:20px 20px 20px 6px;padding:14px 16px 16px;display:grid;gap:12px}
+.v-call .ask .line{color:#fff}
+.v-call .verdict{background:rgba(255,107,94,.14);border:1px solid rgba(255,107,94,.55);border-radius:20px 20px 20px 6px;padding:14px 16px}
+.v-call #go{width:84px;height:84px;border-radius:50%;border:0;background:#fff;color:#0c171d;display:grid;place-items:center;position:relative}
+.v-call #go svg{width:34px;height:34px}
+.v-call #go.stop{background:var(--bad);color:#fff}
+.v-call #go.stop::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--bad);animation:ring 1.2s ease-out infinite}
+@keyframes ring{from{transform:scale(.9);opacity:1}to{transform:scale(1.25);opacity:0}}
+.v-call .golb{font-size:15px;font-weight:600}
+
+/* ================= look 2 · printed check form ================= */
+.v-form{--bg:#dfe4e6;--fg:#141414;--sub:#5b6266;--bad:#c4221a;--dot:#c9cfd2;--dot-on:#141414;
+  --step-r:0;--step-bg:#fff;--step-fg:#5b6266;--step-on-bg:#141414;--step-on-fg:#fff;
+  --track:#eceff0;--fill:#b9c3c8;--fill-edge:#141414;--me-ring:#fff;
+  --wave:#141414;--wave-dim:#c9cfd2;--wave-hot:#c4221a;--wave-flat:#9aa2a6;
+  background:var(--bg);color:var(--fg)}
+.v-form .app{background:#fff;margin:16px auto;min-height:calc(100dvh - 32px);width:min(440px,calc(100% - 24px));border:1.5px solid #141414;box-shadow:6px 6px 0 rgba(0,0,0,.12);padding:20px 16px}
+.v-form .serif{font-family:"Noto Serif SC","Songti SC",serif}
+.v-form .hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px double #141414;padding-bottom:10px}
+.v-form .hd h1{margin:0;font-size:24px;font-weight:900;letter-spacing:.06em}
+.v-form .hd small{display:block;font-size:12px;color:var(--sub);margin-top:4px}
+.v-form .steps{gap:0;border:1.5px solid #141414}
+.v-form .steps li+li{border-left:1.5px solid #141414}
+.v-form .ask{border:1.5px solid #141414}
+.v-form .ask>div{display:grid;grid-template-columns:5.5em 1fr;border-bottom:1px solid #141414}
+.v-form .ask>div:last-child{border-bottom:0}
+.v-form .ask .k{margin:0;padding:12px 10px;background:#f1f3f4;border-right:1px solid #141414;color:#141414;font-weight:600;font-size:13px}
+.v-form .ask .val{padding:12px}
+.v-form .wavebox{border:1.5px solid #141414;padding:6px 8px 8px}
+.v-form .wavebox .k{font-weight:600;color:#141414}
+.v-form .wave{background:repeating-linear-gradient(90deg,transparent 0 23px,#eef1f2 23px 24px),repeating-linear-gradient(0deg,transparent 0 23px,#eef1f2 23px 24px)}
+.v-form .verdict{border:1.5px solid var(--bad);padding:14px 14px 14px;padding-right:110px;min-height:120px}
+.v-form .stamp{position:absolute;right:10px;top:50%;width:96px;height:96px;margin-top:-48px;border:4px double var(--bad);border-radius:50%;color:var(--bad);
+  display:grid;place-items:center;font:900 22px "Noto Serif SC","Songti SC",serif;letter-spacing:.04em;transform:rotate(-14deg);mix-blend-mode:multiply;opacity:.9}
+.v-form .stamp.hit{animation:stamp .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}}
+.v-form #go{width:100%;height:56px;border:0;background:#141414;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
+.v-form #go svg{width:20px;height:20px}
+.v-form #go.stop{background:var(--bad)}
+.v-form .golb{display:none}
+
+/* review panel */
+.dev{position:fixed;right:12px;bottom:12px;z-index:9;width:240px;background:rgba(255,255,255,.97);color:#141414;border:1px solid #c9cfd2;border-radius:10px;padding:12px;font:12px var(--font-body);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.dev b{display:block;font-size:11px;color:#5b6266;font-weight:500;margin:8px 0 4px}
+.dev .row{display:flex;gap:6px;flex-wrap:wrap}
+.dev .row button{font:11px var(--font-body);padding:4px 8px;border:1px solid #c9cfd2;background:#fff;border-radius:4px;cursor:pointer}
+.dev .row button[aria-pressed="true"]{background:#141414;color:#fff;border-color:#141414}
+.dev .x{position:absolute;top:6px;right:8px;border:0;background:none;cursor:pointer;color:#5b6266}
+.dev.min{width:auto;padding:6px 10px}.dev.min>*:not(.x):not(.ttl){display:none}
+.dev .ttl{font-weight:600;font-size:12px;margin-bottom:4px;padding-right:20px}
+@media (max-width:760px){.dev{left:12px;right:12px;width:auto}.has-dev .app{padding-bottom:72px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
+</head>
+<body class="v-call">
+<main class="app" id="app">
+  <!-- call header -->
+  <div class="who only-call">
+    <span class="av"><img src="assets/img/logo.png" alt=""></span>
+    <b data-i18n="voice.callTitle">Gate voiceprint line</b>
+    <small id="callTime">00:00</small>
+    <span class="dots" id="dots" role="img"></span>
+  </div>
+  <!-- form header -->
+  <div class="hd only-form">
+    <div><h1 class="serif" data-i18n="voice.formTitle">Voiceprint Check Form</h1><small data-i18n="voice.formNo">No. 0003</small></div>
+    <span class="dots" id="dots2" aria-hidden="true"></span>
+  </div>
+
+  <ol class="steps" id="steps">
+    <li data-i18n="voice.step1">Tap the button</li>
+    <li data-i18n="voice.step2">Say the line in the tone</li>
+    <li data-i18n="voice.step3">Pause 1 s to submit</li>
+  </ol>
+
+  <section class="ask" aria-labelledby="line">
+    <div>
+      <p class="k" id="askTone" data-i18n="voice.askTone">Tone required</p>
+      <div class="val">
+        <div class="tone" id="tone1" data-i18n="voice.tone1"></div>
+        <div class="params" id="params" hidden>
+          <div class="prm" id="pPolite"><span><span data-i18n="voice.polite">Polite</span><svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></span>
+            <span class="tr"><span class="tg"></span><span class="me"></span></span><span class="v"></span></div>
+          <div class="prm" id="pImp"><span><span data-i18n="voice.impatient">Impatient</span><svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></span>
+            <span class="tr"><span class="tg"></span><span class="me"></span></span><span class="v"></span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="k" data-i18n="voice.askLine">Say this line</p>
+      <div class="val"><div class="line" id="line" data-i18n="voice.line">Okay, got it.</div></div>
+    </div>
+  </section>
+
+  <div class="wavebox">
+    <p class="k only-form" data-i18n="voice.waveLabel">Voiceprint</p>
+    <div class="wave"><canvas id="cv" role="img" aria-label="Waveform of your voice" data-i18n-aria-label="voice.wave"></canvas><span class="live"><i></i><span data-i18n="voice.listening">Listening…</span></span></div>
+  </div>
+
+  <section class="verdict" id="verdict" aria-live="assertive" hidden>
+    <span class="stamp only-form serif" id="stamp" aria-hidden="true" data-i18n="voice.rejected">Not passed</span>
+    <h2 id="vTitle"></h2>
+    <p id="vWhy"></p>
+    <p class="nx" id="vNext"></p>
+  </section>
+  <div class="err" id="err" role="alert"></div>
+
+  <div class="act">
+    <button id="go" type="button"></button>
+    <span class="golb" id="golb" aria-hidden="true"></span>
+    <span class="clock" id="clock" aria-hidden="true"></span>
+  </div>
+</main>
+
+<aside class="dev" id="dev">
+  <button class="x" id="devx" type="button" aria-label="Collapse" data-i18n-aria-label="quiz.collapse">–</button>
+  <div class="ttl" data-i18n="preview.panel">看稿面板</div>
+  <b data-i18n="voice.style">风格</b>
+  <div class="row">
+    <button type="button" data-v="call" data-i18n="voice.styleCall">来电</button>
+    <button type="button" data-v="form" data-i18n="voice.styleForm">检测单</button>
+  </div>
+  <b data-i18n="preview.simulate">直接看反馈</b>
+  <div class="row">
+    <button type="button" data-sim="flat" data-i18n="voice.simFlat">平</button>
+    <button type="button" data-sim="over" data-i18n="voice.simOver">起伏大</button>
+    <button type="button" data-sim="normal" data-i18n="voice.simNormal">正常</button>
+  </div>
+</aside>
+
+<script>i18n.apply(document);</script>
+<script src="flow.js"></script>
+<script src="bloom.js"></script>
+<script>
+const $=id=>document.getElementById(id),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const ROUNDS=3;               // round 3 (±0.5 tolerance + playback) comes next
+const MAXS=6,STEP=50;         // seconds on the strip, ms per envelope sample
+const SPLIT=7.2;              // dB spread: below = "flat / TTS", above = "acting"
+const TARGET={polite:70,imp:30};
+let round=0,env=[],ctx=null,an=null,stream=null,t0=0,raf=0,floor=-60;
+
+/* ---------- look ---------- */
+const params=new URLSearchParams(location.search);
+function setLook(v){
+  document.body.className='v-'+v;
+  document.querySelectorAll('[data-v]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));
+  try{localStorage.setItem('voice-look',v);}catch{}
+  draw();
+}
+let look=params.get('v');try{look=look||localStorage.getItem('voice-look');}catch{}
+look=look==='form'?'form':'call';
+
+/* call timer, like a phone line that's been open since you arrived */
+const callStart=Date.now();
+setInterval(()=>{const s=(Date.now()-callStart)/1000|0;$('callTime').textContent=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');},1000);
+
+/* ---------- UI bits ---------- */
+const MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>';
+const STOP='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+const ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+function button(kind){
+  const g=$('go');g.className=kind==='stop'?'stop':'';g.dataset.kind=kind;
+  const label=t({record:'voice.tapToRecord',stop:'voice.tapToStop',retry:'voice.retry',next:'voice.continue'}[kind]);
+  const icon=kind==='stop'?STOP:kind==='next'?ARROW:MIC;
+  // the round call button carries only the icon; its words sit underneath
+  g.innerHTML=icon+`<span class="only-form">${label}</span>`;g.setAttribute('aria-label',label);
+  $('golb').textContent=label;
+}
+function steps(n){document.querySelectorAll('#steps li').forEach((li,i)=>li.classList.toggle('on',i+1===n));}
+function setDots(){for(const id of ['dots','dots2']){const d=$(id);d.innerHTML=Array.from({length:ROUNDS},(_,i)=>`<i class="${i<=round?'on':''}"></i>`).join('');}
+  $('dots').setAttribute('aria-label',t('voice.progress',{n:round+1,total:ROUNDS}));}
+function reject(title,why,next){
+  const v=$('verdict');v.hidden=false;$('vTitle').textContent=title;$('vWhy').textContent=why;$('vNext').textContent=next;
+  const s=$('stamp');s.classList.remove('hit');void s.offsetWidth;s.classList.add('hit');
+  v.classList.remove('shake');void v.offsetWidth;v.classList.add('shake');
+  beep();v.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+/* two short low tones: the "wrong answer" of an automated phone line */
+function beep(){try{ctx=ctx||new AudioContext();const n=ctx.currentTime;
+  [0,.22].forEach(d=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=330;o.type='square';
+    g.gain.setValueAtTime(0,n+d);g.gain.linearRampToValueAtTime(.06,n+d+.01);g.gain.setValueAtTime(.06,n+d+.14);g.gain.linearRampToValueAtTime(0,n+d+.16);
+    o.connect(g).connect(ctx.destination);o.start(n+d);o.stop(n+d+.18);});}catch{}}
+
+/* ---------- waveform strip: one mirrored bar per 50 ms ---------- */
+function draw(mark){
+  const cv=$('cv'),r=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;if(!w)return;
+  if(cv.width!==w*r||cv.height!==h*r){cv.width=w*r;cv.height=h*r;}
+  const g=cv.getContext('2d');g.setTransform(r,0,0,r,0,0);g.clearRect(0,0,w,h);
+  const css=getComputedStyle(document.body),C=k=>css.getPropertyValue(k).trim();
+  const n=MAXS*1000/STEP,bw=w/n,mid=h/2;
+  g.fillStyle=C('--wave-dim');g.fillRect(0,mid-.5,w,1);
+  env.forEach((e,i)=>{
+    const a=Math.min(1,Math.max(0,(e.db-floor)/50));       // fixed 50 dB scale, so a flat reading looks flat
+    const bh=Math.max(1.5,a*(h/2-4));
+    let c=e.sp?C('--wave'):C('--wave-dim');
+    if(mark==='flat'&&e.sp)c=C('--wave-flat');
+    if(mark==='over'&&e.hot)c=C('--wave-hot');
+    g.fillStyle=c;g.fillRect(i*bw+bw*.15,mid-bh,bw*.7,bh*2);
+  });
+}
+
+/* ---------- measuring: spread of loudness over the voiced part, and its length ---------- */
+function measure(){
+  const sp=env.filter(e=>e.sp);
+  if(sp.length<6)return null;
+  const m=sp.reduce((a,e)=>a+e.db,0)/sp.length;
+  const sd=Math.sqrt(sp.reduce((a,e)=>a+(e.db-m)**2,0)/sp.length);
+  const first=env.findIndex(e=>e.sp),last=env.length-1-[...env].reverse().findIndex(e=>e.sp);
+  sp.forEach(e=>e.hot=e.db>m+sd);
+  return {sd,dur:(last-first+1)*STEP/1000};
+}
+
+/* ---------- microphone ---------- */
+async function start(){
+  $('err').textContent='';$('verdict').hidden=true;
+  try{
+    if(!stream)stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  }catch(e){$('err').textContent=t('voice.micBlocked');return;}
+  ctx=ctx||new AudioContext();await ctx.resume();
+  if(!an){an=ctx.createAnalyser();an.fftSize=2048;ctx.createMediaStreamSource(stream).connect(an);}
+  env=[];$('app').classList.add('rec');button('stop');steps(2);t0=performance.now();
+  const buf=new Float32Array(an.fftSize);let next=0,quiet=0,heard=false,cal=[];
+  const tick=()=>{
+    const el=performance.now()-t0;$('clock').textContent=(el/1000).toFixed(1)+' s';
+    if(el>=next){next+=STEP;
+      an.getFloatTimeDomainData(buf);let s=0;for(const x of buf)s+=x*x;
+      const db=Math.max(-90,10*Math.log10(s/buf.length+1e-12));
+      if(el<300){cal.push(db);floor=Math.min(...cal);}
+      const sp=db>Math.max(floor+9,-55);
+      env.push({db,sp});heard=heard||sp;quiet=sp?0:quiet+STEP;
+      if(heard&&quiet>=200)steps(3);else if(heard)steps(2);
+      draw();
+      if((heard&&quiet>900)||el>=MAXS*1000){stop();return;}
+    }
+    raf=requestAnimationFrame(tick);
+  };tick();
+}
+function stop(){cancelAnimationFrame(raf);$('app').classList.remove('rec');judge(measure());}
+
+/* ---------- the two rounds ---------- */
+async function judge(r){
+  steps(0);
+  if(!r){draw();reject(t('voice.noVoiceTitle'),t('voice.noVoiceWhy'),t('voice.noVoiceNext'));button('record');steps(1);return;}
+  $('clock').textContent=r.dur.toFixed(1)+' s';
+  if(round===0){
+    // always rejected: the human band is a 0.2 dB sliver just past whichever side you land on
+    const flat=r.sd<SPLIT,lo=flat?(r.sd+2.1):Math.max(.5,r.sd-3.4),hi=lo+.2;
+    const p={db:r.sd.toFixed(1),lo:lo.toFixed(1),hi:hi.toFixed(1)};
+    draw(flat?'flat':'over');
+    reject(t(flat?'voice.flatTitle':'voice.overTitle'),t(flat?'voice.flatWhy':'voice.overWhy',p),t('voice.flatNext'));
+    button('retry');steps(1);return;
+  }
+  // round 2: turn the reading into "polite / impatient" and miss the target by a visible margin
+  draw();
+  let imp=TARGET.imp+(r.sd-SPLIT)*3.2+(1.3-r.dur)*22+(Math.random()-.5)*8;
+  imp=Math.round(Math.min(88,Math.max(6,imp)));
+  if(Math.abs(imp-TARGET.imp)<3)imp=TARGET.imp+(Math.random()<.5?-3:3)+(Math.random()<.5?-1:1);
+  const pol=Math.round(Math.min(94,Math.max(8,100-imp-2-Math.random()*8)));
+  showMe('pPolite',pol,TARGET.polite);showMe('pImp',imp,TARGET.imp);
+  await wait(700);
+  const d=Math.abs(imp-TARGET.imp);
+  reject(t('voice.tolTitle'),t('voice.tolWhy',{target:TARGET.imp,you:imp,d}),t(imp>TARGET.imp?'voice.tolNextLower':'voice.tolNextRaise',{d}));
+  button('next');
+}
+function showMe(id,val,target){
+  const p=$(id);p.classList.add('show');p.querySelector('.me').style.left=val+'%';
+  p.querySelector('.v').innerHTML=`${target}%<small>${t('voice.you')} ${val}%</small>`;
+}
+function setRound(i){
+  round=i;setDots();env=[];draw();$('verdict').hidden=true;$('clock').textContent='';
+  $('askTone').textContent=t(i===0?'voice.askTone':'voice.askTone2');
+  $('tone1').hidden=i!==0;$('params').hidden=i===0;
+  for(const [id,val] of [['pPolite',TARGET.polite],['pImp',TARGET.imp]]){
+    const p=$(id);p.classList.remove('show');p.querySelector('.tg').style.width=val+'%';p.querySelector('.v').textContent=val+'%';}
+  button('record');steps(1);
+}
+$('go').onclick=async()=>{
+  const k=$('go').dataset.kind;
+  if(k==='record'){start();return;}
+  if(k==='stop'){stop();return;}
+  if(k==='retry'){setRound(1);start();return;}   // round 2 starts listening right away, with the new numbers on screen
+  // TODO round 3: ±0.5 tolerance, then playback of the original vs the flattened "standard" voice
+  const r=$('go').getBoundingClientRect();
+  if(window.Bloom)await Bloom.play({from:{x:r.left+r.width/2,y:r.top+r.height/2},color:'pass',hold:450});
+  flowNext();
+};
+
+/* ---------- review panel: fake a reading without a mic ---------- */
+function fake(kind){
+  if($('go').dataset.kind==='retry')setRound(1);
+  floor=-62;env=[];
+  for(let i=0;i<8;i++)env.push({db:-62+Math.random()*2,sp:false});
+  const n=kind==='flat'?22:kind==='over'?30:26;
+  for(let i=0;i<n;i++){const x=i/n,shape=Math.sin(x*Math.PI)*(1+.6*Math.sin(x*11));
+    const db=kind==='flat'?-30+Math.random()*3:kind==='over'?-42+shape*30+Math.random()*6:-36+shape*16+Math.random()*4;
+    env.push({db,sp:true});}
+  for(let i=0;i<10;i++)env.push({db:-61+Math.random()*2,sp:false});
+  cancelAnimationFrame(raf);$('app').classList.remove('rec');judge(measure());
+}
+document.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>fake(b.dataset.sim));
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>setLook(b.dataset.v));
+$('devx').onclick=()=>$('dev').classList.toggle('min');
+if(params.has('nodev'))$('dev').hidden=true;else document.documentElement.classList.add('has-dev');
+if(innerWidth<760)$('dev').classList.add('min');
+addEventListener('resize',()=>draw());
+setLook(look);setRound(0);
+</script>
+</body>
+</html>

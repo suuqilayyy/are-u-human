@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Neverland - Navigator</title>
+<title data-i18n="index.title">Neverland - Navigator</title>
 <style>
 :root{
   --win:#c0c0c0; --win-hi:#ffffff; --win-lo:#808080; --win-dk:#000000;
@@ -142,6 +143,7 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
   .tag2{margin-top:6px;font-size:17px}
   .deco{margin:8px 0 0}
   .intro{margin-top:10px;font-size:14px;line-height:1.3}
+  :lang(zh-CN) .hero h1{font-size:clamp(28px,8vw,40px)}
 }
 @media (max-width:380px){.hero h1{font-size:30px}}
 @media (max-width:340px){.hero h1{font-size:27px}}
@@ -150,6 +152,8 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
   .viewport{scroll-behavior:auto}
 }
 </style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -165,45 +169,45 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
 <div id="crt">
 <div class="window out">
-  <div class="titlebar"><span class="ico">N</span><span class="t">Neverland - Navigator</span>
+  <div class="titlebar"><span class="ico">N</span><span class="t" data-i18n="index.title">Neverland - Navigator</span>
     <span class="btns"><span class="out">_</span><span class="out">□</span><span class="out">×</span></span></div>
 
-  <div class="menubar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>G</u>o</span><span><u>C</u>ommunicator</span><span><u>H</u>elp</span></div>
+  <div class="menubar"><span data-i18n-html="menu.file"><u>F</u>ile</span><span data-i18n-html="menu.edit"><u>E</u>dit</span><span data-i18n-html="menu.view"><u>V</u>iew</span><span data-i18n-html="menu.go"><u>G</u>o</span><span data-i18n-html="menu.communicator"><u>C</u>ommunicator</span><span data-i18n-html="menu.help"><u>H</u>elp</span></div>
 
   <div class="toolbar">
-    <div class="tb"><span class="g">⬅️</span><span class="lab">Back</span></div>
-    <div class="tb dis"><span class="g">➡️</span><span class="lab">Forward</span></div>
-    <div class="tb"><span class="g">🔄</span><span class="lab">Reload</span></div>
-    <div class="tb"><span class="g">🏠</span><span class="lab">Home</span></div>
-    <div class="tb"><span class="g">🔍</span><span class="lab">Search</span></div>
-    <div class="tb dis"><span class="g">🖨️</span><span class="lab">Print</span></div>
-    <div class="tb"><span class="g">🔒</span><span class="lab">Security</span></div>
-    <div class="tb"><span class="g">🛑</span><span class="lab">Stop</span></div>
+    <div class="tb"><span class="g">⬅️</span><span class="lab" data-i18n="retro.back">Back</span></div>
+    <div class="tb dis"><span class="g">➡️</span><span class="lab" data-i18n="retro.forward">Forward</span></div>
+    <div class="tb"><span class="g">🔄</span><span class="lab" data-i18n="retro.reload">Reload</span></div>
+    <div class="tb"><span class="g">🏠</span><span class="lab" data-i18n="retro.home">Home</span></div>
+    <div class="tb"><span class="g">🔍</span><span class="lab" data-i18n="retro.search">Search</span></div>
+    <div class="tb dis"><span class="g">🖨️</span><span class="lab" data-i18n="retro.print">Print</span></div>
+    <div class="tb"><span class="g">🔒</span><span class="lab" data-i18n="retro.security">Security</span></div>
+    <div class="tb"><span class="g">🛑</span><span class="lab" data-i18n="retro.stop">Stop</span></div>
     <div class="spacer"></div>
     <div class="logo in">N</div>
   </div>
 
-  <div class="locbar"><span class="lbl">🔖 Bookmarks</span><span class="lbl">Location:</span>
+  <div class="locbar"><span class="lbl" data-i18n="retro.bookmarks">🔖 Bookmarks</span><span class="lbl" data-i18n="retro.location">Location:</span>
     <div class="field in">http://www.neverland.org/~humans/index.html</div></div>
 
   <div class="viewport in" id="vp">
     <div class="sky">
 
-      <nav class="nav" aria-label="Main navigation">
+      <nav class="nav" aria-label="Main navigation" data-i18n-aria-label="index.navigation">
         <div class="nav-track">
-          <a class="nav-link" href="#verify">Home</a>
-          <a class="nav-link" href="#verify">Forum</a>
-          <a class="nav-link" href="#verify">Members</a>
-          <a class="nav-link" href="#verify">Guestbook</a>
-          <a class="nav-link" href="#verify">Chat Room</a>
-          <a class="nav-link" href="#verify">FAQ</a>
-          <a class="nav-link" href="#verify">Webring</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.home">Home</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.forum">Forum</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.members">Members</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.guestbook">Guestbook</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.chat_room">Chat Room</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.faq">FAQ</a>
+          <a class="nav-link" href="#verify" data-i18n="retro.webring">Webring</a>
         </div>
       </nav>
-      <div class="marquee" aria-label="Site updates">
+      <div class="marquee" aria-label="Site updates" data-i18n-aria-label="index.siteUpdates">
         <div class="marquee-track">
-          <span>*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span>
-          <span aria-hidden="true">*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span>
+          <span data-i18n="retro.news">*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span>
+          <span aria-hidden="true" data-i18n="retro.news">*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span>
         </div>
       </div>
 
@@ -211,13 +215,13 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
         <div class="hero">
           <img class="hand" src="assets/img/thumbs-up.gif" width="384" height="384" alt="">
           <img class="hand" src="assets/img/wave-rings.gif" width="384" height="384" alt="">
-          <h1>Welcome to Neverland</h1>
+          <h1 data-i18n="retro.welcome_to_neverland">Welcome to Neverland</h1>
           <img class="hand" src="assets/img/wave.gif" width="384" height="384" alt="">
           <img class="hand" src="assets/img/ok.gif" width="384" height="384" alt="">
         </div>
 
-        <p class="tag">We only welcome <em class="hot">REAL HUMAN</em>.</p>
-        <p class="tag2">Other intelligences are <em class="hot2">ALL</em> strictly forbidden.</p>
+        <p class="tag" data-i18n-html="index.welcome">We only welcome <em class="hot">REAL HUMAN</em>.</p>
+        <p class="tag2" data-i18n-html="index.forbidden">Other intelligences are <em class="hot2">ALL</em> strictly forbidden.</p>
 
         <div class="deco" aria-hidden="true">
           <svg class="heart" data-heart viewBox="0 0 7 6"></svg>
@@ -225,24 +229,24 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
           <svg class="heart" data-heart viewBox="0 0 7 6"></svg>
         </div>
 
-        <p class="intro">You have entered the city limits of Neverland, the last little corner of the web where every post is typed by a real human hand. No agents, no auto-replies, no "As an AI language model". Our gate is guarded by a very serious security system that has met millions of agents and almost no people.</p>
+        <p class="intro" data-i18n="index.intro">You have entered the city limits of Neverland, the last little corner of the web where every post is typed by a real human hand. No agents, no auto-replies, no "As an AI language model". Our gate is guarded by a very serious security system that has met millions of agents and almost no people.</p>
 
         <div class="gate" id="verify">
-          <div class="warn"><span class="blink">YOU ARE NOT VERIFIED.</span></div>
+          <div class="warn"><span class="blink" data-i18n="index.warning">YOU ARE NOT VERIFIED.</span></div>
           <div class="choices">
-            <a class="verify" href="start.html">Verify.</a>
-            <a class="exit" href="#exit">Exit. I am an AI<br>Agent.</a>
+            <a class="verify" href="start.html" data-i18n="index.verify">Verify.</a>
+            <a class="exit" href="#exit" data-i18n-html="index.exit">Exit. I am an AI<br>Agent.</a>
           </div>
         </div>
 
         <div class="foot">
-          You are visitor No. <span class="counter" id="counter"></span><br>
-          Best viewed with Navigator 4.0 at 800x600 · Last updated 11/22/2040<br>
+          <span data-i18n="retro.visitor">You are visitor No.</span> <span class="counter" id="counter"></span><br>
+          <span data-i18n="retro.footer">Best viewed with Navigator 4.0 at 800x600 · Last updated 11/22/2040</span><br>
           <div class="badges" aria-hidden="true">
-            <span class="badge" style="background:#ffff00">100% HUMAN<br>MADE</span>
-            <span class="badge" style="background:#000;color:#39ff14">NO AGENTS<br>ALLOWED</span>
-            <span class="badge" style="background:#ff99cc">Sign my<br>GUESTBOOK</span>
-            <span class="badge" style="background:#ccffff">Under<br>Construction</span>
+            <span class="badge" style="background:#ffff00" data-i18n-html="retro.100_human_br_made">100% HUMAN<br>MADE</span>
+            <span class="badge" style="background:#000;color:#39ff14" data-i18n-html="retro.no_agents_br_allowed">NO AGENTS<br>ALLOWED</span>
+            <span class="badge" style="background:#ff99cc" data-i18n-html="retro.sign_my_br_guestbook">Sign my<br>GUESTBOOK</span>
+            <span class="badge" style="background:#ccffff" data-i18n-html="retro.under_br_construction">Under<br>Construction</span>
           </div>
         </div>
       </div>
@@ -250,21 +254,22 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
     </div>
   </div>
 
-  <a class="verify-cue" href="#verify" hidden>VERIFY BELOW ↓</a>
+  <a class="verify-cue" href="#verify" hidden data-i18n="index.verifyBelow">VERIFY BELOW ↓</a>
   <div class="statusbar">
-    <span class="cell in grow">Document: Done</span>
+    <span class="cell in grow" data-i18n="retro.document_done">Document: Done</span>
     <span class="cell in">🔒</span>
-    <span class="cell in">Humans online: 3</span>
+    <span class="cell in" data-i18n="retro.humans_online_3">Humans online: 3</span>
   </div>
 </div>
 
 <div class="taskbar">
-  <div class="start out"><i>🪟</i>Start</div>
-  <div class="task in"><span>🌐</span>Neverland - Navigator</div>
+  <div class="start out"><i>🪟</i><span data-i18n="retro.start">Start</span></div>
+  <div class="task in"><span>🌐</span><span data-i18n="retro.neverland_navigator">Neverland - Navigator</span></div>
   <div class="tray in"><span>🔈</span><span id="clock">00:37</span></div>
 </div>
 </div>
 
+<script>i18n.apply(document);</script>
 <script>
 (function(){
   var viewport=document.getElementById('vp');

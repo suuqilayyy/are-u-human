@@ -1,14 +1,20 @@
 // Shared order of the experience. "]" jumps to the next page, "[" to the previous (for rehearsing without a camera).
 (function(){
-  var ORDER=['index.html','start.html','face.html','stage2.html','stage.html?s=3','jury.html','pass.html','forum.html'];
+  var ORDER=['index.html','start.html','face.html','stage2.html','stage3.html','jury.html','pass.html','forum.html','credits.html'];
   var portal = location.hostname === 'portal.ariari.art';
   var deployed = portal || location.hostname === 'ariari.art';
-  function destination(page){
+  function route(page){
     if(!deployed) return page;
     if(page === 'index.html') return 'https://ariari.art/';
     if(page === 'forum.html') return 'https://ariari.art/forum.html';
     return 'https://portal.ariari.art/' + (page === 'start.html' ? '' : page);
   }
+  function destination(page){
+    const path = route(page);
+    return window.i18n ? i18n.url(path) : path;
+  }
+  const entry = document.querySelector('a.verify');
+  if (entry) entry.href = destination('start.html');
   function here(){
     var p=location.pathname.split('/').pop()||(portal?'start.html':'index.html');
     var q=new URLSearchParams(location.search).get('s');

@@ -53,6 +53,15 @@
         ],
         "createdAt": "2026-11-22T01:29:51.310Z",
         "reason": "Claude judgement: outer box is a phone-frame mock in a motion comparison lab; the inner card is the checkbox widget being prototyped, not a UI hierarchy"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "stage3.html"
+        ],
+        "createdAt": "2026-11-22T03:38:59.214Z",
+        "reason": "Claude: the blinking dot shows only while the microphone is actually recording, a genuine live state"
       }
     ]
   }

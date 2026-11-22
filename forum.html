@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="assets/img/logo.png">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Neverland Forum · Neverland - Navigator</title>
+<title data-i18n="forum.title">Neverland Forum · Neverland - Navigator</title>
 <style>
 :root{
   --win:#c0c0c0; --win-hi:#ffffff; --win-lo:#808080; --win-dk:#000000;
@@ -68,6 +69,14 @@ body{background:#008080;font-family:"MS Sans Serif","Microsoft Sans Serif",Tahom
 @keyframes wave-flip{0%{transform:scaleX(-1) rotate(-14deg)}50%{transform:scaleX(-1) rotate(10deg)}}
 h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);text-shadow:1px 1px 0 #c9c3ff}
 .tag{margin:18px 0 0;font-size:clamp(24px,3.4vw,38px);font-weight:700;color:var(--ink2)}
+.welcome{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:16px;background:rgba(0,128,128,.35);transition:opacity 1.6s ease}
+.welcome.gone{opacity:0;pointer-events:none}
+.welcome .win{max-width:460px;background:var(--win);padding:2px}
+.welcome .bd{padding:18px 20px 20px;font-size:15px;line-height:1.5}
+.welcome h2{margin:0 0 10px;font-size:32px;color:var(--pink);letter-spacing:.04em}
+.welcome .share{margin-top:10px}
+.welcome .sorry{margin-top:10px;color:var(--red)}
+@media (prefers-reduced-motion:reduce){.welcome{transition:none}}
 .tag2{margin:8px 0 0;font-size:clamp(20px,2.6vw,28px);font-weight:700;color:var(--ink2)}
 .deco{display:flex;justify-content:center;gap:18px;margin:26px 0 6px}
 .heart{width:30px;height:28px;image-rendering:pixelated;animation:beat 1s steps(2) infinite}
@@ -111,6 +120,13 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 @media (max-width:640px){
   .tb{width:44px}.tb .lab{display:none}
   .sprite{width:64px;height:86px}
+  .nav tr{display:flex;flex-wrap:wrap;justify-content:center;gap:3px}
+  .nav td{padding:3px 6px;white-space:nowrap}
+  .hero{gap:4px}
+  .hero .hand{width:clamp(28px,9vw,48px)}
+  .hero h1{min-width:0;text-wrap:balance}
+  :lang(zh-CN) .hero h1{font-size:clamp(28px,8vw,40px)}
+
 }
 @media (prefers-reduced-motion:reduce){
   .marquee span,.blink,.heart{animation:none}
@@ -137,6 +153,8 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 .win .tx{margin:8px;height:150px;overflow:auto;background:#fff;border:2px inset #ccc;padding:8px;font-size:12px;line-height:1.5}
 .win .ft{margin:0 8px 8px;display:flex;justify-content:space-between;align-items:center}
 </style>
+<script src="i18n/messages.js"></script>
+<script src="i18n.js"></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -152,25 +170,25 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
 <div id="crt">
 <div class="window out">
-  <div class="titlebar"><span class="ico">N</span><span class="t">Neverland - Navigator</span>
+  <div class="titlebar"><span class="ico">N</span><span class="t" data-i18n="retro.neverland_navigator">Neverland - Navigator</span>
     <span class="btns"><span class="out">_</span><span class="out">□</span><span class="out">×</span></span></div>
 
-  <div class="menubar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>G</u>o</span><span><u>C</u>ommunicator</span><span><u>H</u>elp</span></div>
+  <div class="menubar"><span data-i18n-html="menu.file"><u>F</u>ile</span><span data-i18n-html="menu.edit"><u>E</u>dit</span><span data-i18n-html="menu.view"><u>V</u>iew</span><span data-i18n-html="menu.go"><u>G</u>o</span><span data-i18n-html="menu.communicator"><u>C</u>ommunicator</span><span data-i18n-html="menu.help"><u>H</u>elp</span></div>
 
   <div class="toolbar">
-    <div class="tb"><span class="g">⬅️</span><span class="lab">Back</span></div>
-    <div class="tb dis"><span class="g">➡️</span><span class="lab">Forward</span></div>
-    <div class="tb"><span class="g">🔄</span><span class="lab">Reload</span></div>
-    <div class="tb"><span class="g">🏠</span><span class="lab">Home</span></div>
-    <div class="tb"><span class="g">🔍</span><span class="lab">Search</span></div>
-    <div class="tb dis"><span class="g">🖨️</span><span class="lab">Print</span></div>
-    <div class="tb"><span class="g">🔒</span><span class="lab">Security</span></div>
-    <div class="tb"><span class="g">🛑</span><span class="lab">Stop</span></div>
+    <div class="tb"><span class="g">⬅️</span><span class="lab" data-i18n="retro.back">Back</span></div>
+    <div class="tb dis"><span class="g">➡️</span><span class="lab" data-i18n="retro.forward">Forward</span></div>
+    <div class="tb"><span class="g">🔄</span><span class="lab" data-i18n="retro.reload">Reload</span></div>
+    <div class="tb"><span class="g">🏠</span><span class="lab" data-i18n="retro.home">Home</span></div>
+    <div class="tb"><span class="g">🔍</span><span class="lab" data-i18n="retro.search">Search</span></div>
+    <div class="tb dis"><span class="g">🖨️</span><span class="lab" data-i18n="retro.print">Print</span></div>
+    <div class="tb"><span class="g">🔒</span><span class="lab" data-i18n="retro.security">Security</span></div>
+    <div class="tb"><span class="g">🛑</span><span class="lab" data-i18n="retro.stop">Stop</span></div>
     <div class="spacer"></div>
     <div class="logo in">N</div>
   </div>
 
-  <div class="locbar"><span class="lbl">🔖 Bookmarks</span><span class="lbl">Location:</span>
+  <div class="locbar"><span class="lbl" data-i18n="retro.bookmarks">🔖 Bookmarks</span><span class="lbl" data-i18n="retro.location">Location:</span>
     <div class="field in">http://www.neverland.org/~humans/forum.html</div></div>
 
   <div class="viewport in" id="vp">
@@ -178,49 +196,49 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
 
       <div class="nav">
         <table><tr>
-          <td><a href="#">Home</a></td>
-          <td><a href="#">Forum</a></td>
-          <td><a href="#">Members</a></td>
-          <td><a href="#">Guestbook</a></td>
-          <td><a href="#">Chat Room</a></td>
-          <td><a href="#">FAQ</a></td>
-          <td><a href="#">Webring</a></td>
+          <td><a href="#" data-i18n="retro.home">Home</a></td>
+          <td><a href="#" data-i18n="retro.forum">Forum</a></td>
+          <td><a href="#" data-i18n="retro.members">Members</a></td>
+          <td><a href="#" data-i18n="retro.guestbook">Guestbook</a></td>
+          <td><a href="#" data-i18n="retro.chat_room">Chat Room</a></td>
+          <td><a href="#" data-i18n="retro.faq">FAQ</a></td>
+          <td><a href="#" data-i18n="retro.webring">Webring</a></td>
         </tr></table>
       </div>
-      <div class="marquee"><span>*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span></div>
+      <div class="marquee"><span data-i18n="retro.news">*** NEW! Board "Lost &amp; Found" is open *** Human members online: 3 *** Please sign our Guestbook!! *** No bots, no scripts, no agents. Thank you! ***</span></div>
 
       <div class="hero">
         <img class="hand" src="assets/img/wave-rings.gif" alt="">
-        <h1>Welcome to Neverland</h1>
+        <h1 data-i18n="retro.welcome_to_neverland">Welcome to Neverland</h1>
         <img class="hand" src="assets/img/wave.gif" alt="">
       </div>
 
-      <p class="tag">Welcome back, <em class="hot">Visitor #0047</em>.</p>
-      <p class="tag2">Your camera must stay on while you are here.</p>
+      <p class="tag" data-i18n-html="forum.welcome">Welcome back, <em class="hot">Visitor #0047</em>.</p>
+      <p class="tag2" data-i18n="forum.camera">Your camera must stay on while you are here.</p>
 
       <table class="board" cellpadding="6">
-        <tr class="bh"><td>Topic</td><td>From</td><td>Replies</td></tr>
-        <tr class="pin"><td><a href="#t1" id="open">&#128204; does anyone remember the first time u went out alone as a kid??</a></td><td>marigold_77</td><td id="rc">0</td></tr>
-        <tr><td><a href="#">my cat learned to open the fridge. send help</a></td><td>tofu.jpg</td><td>12</td></tr>
-        <tr><td><a href="#">is it weird that i still write letters</a></td><td>pen_pal</td><td>4</td></tr>
-        <tr><td><a href="#">found my old diary from 2031 lol</a></td><td>xX_june_Xx</td><td>7</td></tr>
+        <tr class="bh"><td data-i18n="forum.topic">Topic</td><td data-i18n="forum.from">From</td><td data-i18n="forum.replies">Replies</td></tr>
+        <tr class="pin"><td><a href="#t1" id="open" data-i18n="forum.pinned">&#128204; does anyone remember the first time u went out alone as a kid??</a></td><td>marigold_77</td><td id="rc">0</td></tr>
+        <tr><td><a href="#" data-i18n="forum.cat">my cat learned to open the fridge. send help</a></td><td>tofu.jpg</td><td>12</td></tr>
+        <tr><td><a href="#" data-i18n="forum.letters">is it weird that i still write letters</a></td><td>pen_pal</td><td>4</td></tr>
+        <tr><td><a href="#" data-i18n="forum.diary">found my old diary from 2031 lol</a></td><td>xX_june_Xx</td><td>7</td></tr>
       </table>
 
       <div class="thread" id="t1" hidden>
-        <div class="post"><b>marigold_77</b> wrote:<br>does anyone remember the first time u went out alone as a kid?? i was 8 and i bought bread and felt like a spy. nobody replies here anymore :(</div>
+        <div class="post"><b>marigold_77</b> <span data-i18n="forum.wrote">wrote:</span><br><span data-i18n="forum.memory">does anyone remember the first time u went out alone as a kid?? i was 8 and i bought bread and felt like a spy. nobody replies here anymore :(</span></div>
         <div id="replies"></div>
-        <textarea id="txt" rows="3" placeholder="Write a reply..."></textarea><br>
-        <button type="button" id="post" class="b95">Post Reply</button>
+        <textarea id="txt" rows="3" placeholder="Write a reply..." data-i18n-placeholder="forum.replyPlaceholder"></textarea><br>
+        <button type="button" id="post" class="b95" data-i18n="forum.postReply">Post Reply</button>
       </div>
 
       <div class="foot">
-        You are visitor No. <span class="counter" id="counter"></span><br>
-        Best viewed with Navigator 4.0 at 800x600 · Last updated 11/22/2040<br>
+        <span data-i18n="retro.visitor">You are visitor No.</span> <span class="counter" id="counter"></span><br>
+        <span data-i18n="retro.footer">Best viewed with Navigator 4.0 at 800x600 · Last updated 11/22/2040</span><br>
         <div class="badges" aria-hidden="true">
-          <span class="badge" style="background:#ffff00">100% HUMAN<br>MADE</span>
-          <span class="badge" style="background:#000;color:#39ff14">NO AGENTS<br>ALLOWED</span>
-          <span class="badge" style="background:#ff99cc">Sign my<br>GUESTBOOK</span>
-          <span class="badge" style="background:#ccffff">Under<br>Construction</span>
+          <span class="badge" style="background:#ffff00" data-i18n-html="retro.100_human_br_made">100% HUMAN<br>MADE</span>
+          <span class="badge" style="background:#000;color:#39ff14" data-i18n-html="retro.no_agents_br_allowed">NO AGENTS<br>ALLOWED</span>
+          <span class="badge" style="background:#ff99cc" data-i18n-html="retro.sign_my_br_guestbook">Sign my<br>GUESTBOOK</span>
+          <span class="badge" style="background:#ccffff" data-i18n-html="retro.under_br_construction">Under<br>Construction</span>
         </div>
       </div>
 
@@ -228,15 +246,15 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
   </div>
 
   <div class="statusbar">
-    <span class="cell in grow">Document: Done</span>
+    <span class="cell in grow" data-i18n="retro.document_done">Document: Done</span>
     <span class="cell in">🔒</span>
-    <span class="cell in">Humans online: 3</span>
+    <span class="cell in" data-i18n="retro.humans_online_3">Humans online: 3</span>
   </div>
 </div>
 
 <div class="taskbar">
-  <div class="start out"><i>🪟</i>Start</div>
-  <div class="task in"><span>🌐</span>Neverland - Navigator</div>
+  <div class="start out"><i>🪟</i><span data-i18n="retro.start">Start</span></div>
+  <div class="task in"><span>🌐</span><span data-i18n="retro.neverland_navigator">Neverland - Navigator</span></div>
   <div class="tray in"><span>🔈</span><span id="clock">00:37</span></div>
 </div>
 </div>
@@ -336,23 +354,29 @@ h1{margin:0;font-size:clamp(40px,6.4vw,72px);font-weight:700;color:var(--ink);te
   clock();setInterval(clock,30000);
 })();
 </script>
-<div class="cam" aria-label="Your camera"><video id="cv" playsinline muted autoplay></video><div class="s"><i></i>Presence check · live</div></div>
+<div class="cam" aria-label="Your camera" data-i18n-aria-label="forum.yourCamera"><video id="cv" playsinline muted autoplay></video><div class="s"><i></i><span data-i18n="forum.live">Presence check · live</span></div></div>
+<div class="welcome" id="welcome" role="dialog" aria-labelledby="wt"><div class="win out"><div class="titlebar"><span class="t">Neverland</span></div><div class="bd"><h2 id="wt" data-i18n="forum.wTitle">WELCOME!</h2><div id="wbody"></div><div class="share" data-i18n="forum.wShare"></div><div class="sorry" data-i18n="forum.wSorry"></div></div></div></div>
 <div class="dlg" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dt">
-  <div class="win"><div class="tt" id="dt">No-AI Content Declaration</div>
-    <div class="tx" id="terms">PLACEHOLDER. By posting on Neverland you declare that every word of this reply was typed by your own hand, that no agent, assistant, autocomplete or language model was consulted, suggested, or present in the room...<br><br>Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. Section continues. <br><br>End of declaration.</div>
-    <div class="ft"><label><input type="checkbox" id="agree" disabled> I declare this reply is human-made</label><button type="button" class="b95" id="ok" disabled>Post</button></div>
+  <div class="win"><div class="tt" id="dt" data-i18n="forum.declaration">No-AI Content Declaration</div>
+    <div class="tx" id="terms"><span data-i18n="forum.terms">PLACEHOLDER. By posting on Neverland you declare that every word of this reply was typed by your own hand, that no agent, assistant, autocomplete or language model was consulted, suggested, or present in the room...</span><br><br><span id="sections"></span><br><br><span data-i18n="forum.end">End of declaration.</span></div>
+    <div class="ft"><label><input type="checkbox" id="agree" disabled> <span data-i18n="forum.agree">I declare this reply is human-made</span></label><button type="button" class="b95" id="ok" disabled data-i18n="forum.post">Post</button></div>
   </div>
 </div>
 <script>
 (function(){
   var $=function(id){return document.getElementById(id)};
+  i18n.apply(document);
+  $('wbody').textContent = t('forum.wBody', {n: '0047'});
+  setTimeout(function(){$('welcome').classList.add('gone');}, 9000);
+  $('welcome').onclick=function(){this.classList.add('gone');};
+  $('sections').textContent = (t('forum.section') + ' ').repeat(60);
   if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia({video:true}).then(function(st){$('cv').srcObject=st;}).catch(function(){});}
   $('open').onclick=function(e){e.preventDefault();$('t1').hidden=false;$('txt').focus();};
   $('post').onclick=function(){if(!$('txt').value.trim())return;$('dlg').classList.add('on');$('terms').scrollTop=0;};
   $('terms').onscroll=function(){var t=$('terms');if(t.scrollTop+t.clientHeight>=t.scrollHeight-4)$('agree').disabled=false;};
   $('agree').onchange=function(){$('ok').disabled=!this.checked;};
   $('ok').onclick=function(){
-    var d=document.createElement('div');d.className='post';d.innerHTML='<b>Visitor #0047</b> wrote:<br>';d.appendChild(document.createTextNode($('txt').value));
+    var d=document.createElement('div');d.className='post';d.innerHTML=t('forum.replyAuthor');d.appendChild(document.createTextNode($('txt').value));
     $('replies').appendChild(d);$('txt').value='';$('rc').textContent='1';$('dlg').classList.remove('on');$('agree').checked=false;$('agree').disabled=true;$('ok').disabled=true;
   };
 })();

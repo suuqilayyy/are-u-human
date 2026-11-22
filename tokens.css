@@ -38,9 +38,9 @@
   --pass:#2fb35d;      /* full-page pass wipe + checkbox, 11-22 */
 
   /* type */
-  --font-display:Doto,ui-monospace,monospace;
+  --font-display:Doto,ui-monospace,"PingFang SC","Noto Sans SC",monospace;
   --fw-display:800;
-  --font-body:Inter,-apple-system,"SF Pro Text",sans-serif;
+  --font-body:Inter,-apple-system,"SF Pro Text","PingFang SC","Noto Sans SC",sans-serif;
   --fs-display:clamp(40px,11.5vw,54px);
   --fs-title:28px;
   --fs-lead:21px;
